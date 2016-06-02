@@ -1,5 +1,6 @@
 package br.unirio.pcs.foresight.domain;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -11,16 +12,20 @@ public class Player extends Sprite {
 	private static final int PLAYER_POSITION_X = 30;
 	private static final int PLAYER_POSITION_Y = 500;
 	private static final int PLAYER_RUN_SPEED = 250;
+	private static final int PLAYER_JUMP_SPEED = 250;
 	private Image[] playerSprite = new Image[10];
 	private Image[] playerGunSprite = new Image [2];
 	public boolean[] key_states = new boolean[256];
 	private double frametime = 0;
 	private boolean Projectile;
 	private int steps = 0;
+	private double jumpVelocity = 0.0; 
+	private double que = 0;
+	private double frametimeJump;
+	private boolean onGround;
 
 	public Player() {
-
-		super(PLAYER_POSITION_X, PLAYER_POSITION_Y, PLAYER_RUN_SPEED);
+		super(PLAYER_POSITION_X, PLAYER_POSITION_Y, PLAYER_RUN_SPEED, PLAYER_JUMP_SPEED);
 		playerSprite[0] = new ImageIcon("images/characters/yellow/alienYellow_stand_right.png").getImage();
 		playerSprite[1] = new ImageIcon("images/characters/yellow/alienYellow_walk_right0.png").getImage();
 		playerSprite[2] = new ImageIcon("images/characters/yellow/alienYellow_walk_right1.png").getImage();
@@ -34,7 +39,6 @@ public class Player extends Sprite {
 //		playerGunSprite[0] = new ImageIcon("images/weapons/raygunPurple_right.png").getImage();
 		playerGunSprite[1] = new ImageIcon("images/weapons/raygunPurple_left.png").getImage();
 		playerGunSprite[0] = new ImageIcon("images/weapons/ak.png").getImage();
-		
 	}
 
 	public boolean getProjectile() {
@@ -43,42 +47,53 @@ public class Player extends Sprite {
 
 	@Override
 	public void update(double differenceTime) {
-
+		que = differenceTime;
 		Projectile = false;
+		
 		// Player movements controller
 		if ((key_states[KeyEvent.VK_RIGHT]) && (positionX < 956)) {
-			frametime += differenceTime;
-			if (frametime > 0.1) {
-				steps++;
-				if (steps < 1 || steps > 2)
-					steps = 1;
-				frametime = 0;
-			}
-			positionX += (speed * differenceTime);
+			walk(differenceTime, 1, 1);
 		} else if ((key_states[KeyEvent.VK_LEFT]) && (positionX > -4)) {
-			frametime += differenceTime;
-			if (frametime > 0.1) {
-				steps++;
-				if (steps < 4 || steps > 5)
-					steps = 4;
-				frametime = 0;
-			}
-			positionX -= (speed * differenceTime);
-		} else if (key_states[KeyEvent.VK_UP]) {
-			frametime += differenceTime;
-			do {
-				steps = 6;
-				positionY -= (speed * differenceTime);
-			}
-			while (frametime > 0.5);
+			walk(differenceTime, 4, -1);
 		} else if (steps > 0 && steps < 3)
 			steps = 0;
-		else if (steps > 3)
+		else if (steps > 3 && steps < 6)
 			steps = 3;
+		
+		if (key_states[KeyEvent.VK_UP]) {
+			frametimeJump += differenceTime;
+			if(frametimeJump < 1)
+				jumpVelocity = -1 * speedY * differenceTime;
+			steps = 7;
+			onGround = false;
+		}
+
+		if(onGround) {
+			jumpVelocity = 0.0;
+			frametimeJump = 0;
+		} else {
+			jumpVelocity += gravity * differenceTime;
+		}
+		
+		positionY += jumpVelocity;
+		
+		onGround = positionY >= 600;
+		
 		// Player shots controller
 		if ((key_states[KeyEvent.VK_CONTROL])) {
 			Projectile = true;
 		}
+	}
+
+	private void walk(double differenceTime, int firstStep, int horizontalDirection) {
+		frametime += differenceTime;
+		if (frametime > 0.1) {
+			steps++;
+			if (steps < firstStep || steps > (firstStep+1))
+				steps = firstStep;
+			frametime = 0;
+		}
+		positionX += (horizontalDirection * speedY * differenceTime);
 	}
 
 	@Override
@@ -89,6 +104,9 @@ public class Player extends Sprite {
 			graphics2D.drawImage(playerGunSprite[0], (int) positionX - 16,(int) positionY + 14, null);
 		else
 			graphics2D.drawImage(playerGunSprite[1], (int) positionX - 44,(int) positionY + 11, null);
+		
+		graphics2D.setColor(Color.WHITE);
+		graphics2D.drawString(String.valueOf(jumpVelocity), 10, 10);
+		
 	}
-
 }
