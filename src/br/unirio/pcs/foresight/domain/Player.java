@@ -12,7 +12,7 @@ public class Player extends Sprite {
 	private static final int PLAYER_POSITION_X = 30;
 	private static final int PLAYER_POSITION_Y = 500;
 	private static final int PLAYER_RUN_SPEED = 250;
-	private static final int PLAYER_JUMP_SPEED = 250;
+	private static final int PLAYER_JUMP_SPEED = 150;
 	private Image[] playerSprite = new Image[10];
 	private Image[] playerGunSprite = new Image [2];
 	public boolean[] key_states = new boolean[256];
@@ -62,10 +62,11 @@ public class Player extends Sprite {
 		
 		if (key_states[KeyEvent.VK_UP]) {
 			frametimeJump += differenceTime;
-			if(frametimeJump < 1)
+			if(frametimeJump < 0.5) {
 				jumpVelocity = -1 * speedY * differenceTime;
+				onGround = false;
+			}
 			steps = 7;
-			onGround = false;
 		}
 
 		if(onGround) {
