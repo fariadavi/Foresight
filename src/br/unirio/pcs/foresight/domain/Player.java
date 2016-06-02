@@ -66,7 +66,10 @@ public class Player extends Sprite {
 				jumpVelocity = -1 * speedY * differenceTime;
 				onGround = false;
 			}
-			steps = 7;
+			if(key_states[KeyEvent.VK_RIGHT] || (steps >= 0 && steps < 3))
+				steps = 6;
+			else if(key_states[KeyEvent.VK_LEFT] || (steps >= 3 && steps < 6))
+				steps = 7;
 		}
 
 		if(onGround) {
