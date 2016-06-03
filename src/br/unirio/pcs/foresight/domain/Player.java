@@ -51,11 +51,11 @@ public class Player extends Sprite {
 		Projectile = false;
 		
 		// Player movements controller
-		if ((key_states[KeyEvent.VK_RIGHT]) && (positionX < 956)) {
+		if ((key_states[KeyEvent.VK_RIGHT]) && (positionX < 956))
 			walk(differenceTime, 1, 1);
-		} else if ((key_states[KeyEvent.VK_LEFT]) && (positionX > -4)) {
+		else if ((key_states[KeyEvent.VK_LEFT]) && (positionX > -4))
 			walk(differenceTime, 4, -1);
-		} else if (steps > 0 && steps < 3)
+		else if (steps > 0 && steps < 3)
 			steps = 0;
 		else if (steps > 3 && steps < 6)
 			steps = 3;
@@ -67,13 +67,13 @@ public class Player extends Sprite {
 				onGround = false;
 			}
 			if(key_states[KeyEvent.VK_RIGHT] || (steps >= 0 && steps < 3))
-				steps = 6;
+				steps = 8;
 			else if(key_states[KeyEvent.VK_LEFT] || (steps >= 3 && steps < 6))
-				steps = 7;
+				steps = 9;
 		}
 
 		if(onGround) {
-			jumpVelocity = 0.0;
+			jumpVelocity = 0;
 			frametimeJump = 0;
 		} else {
 			jumpVelocity += gravity * differenceTime;
