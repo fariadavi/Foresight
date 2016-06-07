@@ -74,7 +74,7 @@ public class Board extends JPanel implements Runnable {
 	
 	private void load() {
         setBackground(Color.BLACK);
-        backgroundMenu[0] = new ImageIcon("images/imagensMenu/mainMenu.png").getImage();
+        backgroundMenu[0] = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
         backgroundMenu[1] = new ImageIcon("images/imagensMenu/passwordMenu.png").getImage();
         backgroundMenu[2] = new ImageIcon("images/imagensMenu/recordsMenu.png").getImage();
         
@@ -86,6 +86,7 @@ public class Board extends JPanel implements Runnable {
 	
 	private void update(double differenceTime) {
 		if(start) {
+			firstLevel.update(differenceTime);
 			player.update(differenceTime);
 		} else {
 			if(mainMenu) {
@@ -115,14 +116,14 @@ public class Board extends JPanel implements Runnable {
 	}
 	
 	private void draw(Graphics graphics) {
-		Graphics2D graphics2D = (Graphics2D)graphics;
 		
+		Graphics2D graphics2D = (Graphics2D)graphics;
 		if(start) {
-			player.draw(graphics2D);
 			firstLevel.draw(graphics2D);
+			player.draw(graphics2D);
 		} else {
 			if(mainMenu)
-				graphics2D.drawImage(backgroundMenu[0], 0, 0, null);
+				graphics2D.drawImage(backgroundMenu[0], 0, -100, null);
 			else if (password)
 				graphics2D.drawImage(backgroundMenu[1], 0, 0, null);
 			else if (recordes)
