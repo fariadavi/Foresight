@@ -1,6 +1,5 @@
 package br.unirio.pcs.foresight.domain;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
@@ -110,7 +109,6 @@ public class Player extends Sprite {
 		else
 			graphics2D.drawImage(playerGunSprite[1], (int) positionX - 44,(int) positionY + 11, null);
 
-		graphics2D.setColor(Color.BLACK);
 		graphics2D.drawString(String.valueOf(jumpVelocity), 10, 10);
 		graphics2D.drawString(String.valueOf(positionX), 10, 20);
 

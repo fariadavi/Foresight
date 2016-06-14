@@ -10,19 +10,19 @@ public class PistolProjectile extends Projectile{
 	
 	private Image bulletSprite;
 	
-	public PistolProjectile(double speed) {
-		super(speed);
+	public PistolProjectile() {
+		super();
 		bulletSprite = new ImageIcon("images/weapons/laserPurpleDot.png").getImage();
 	}
 
 	@Override
 	public void update(double differenceTime) {
-		
+		positionX += 500 * differenceTime;
 	}
 
 	@Override
 	public void draw(Graphics2D graphics2D) {
-		graphics2D.drawImage(bulletSprite, (int) positionX - 44,(int) positionY + 11, null);
+		graphics2D.drawImage(bulletSprite, (int) positionX + 53,(int) positionY + 15, null);
 	}
 
 }

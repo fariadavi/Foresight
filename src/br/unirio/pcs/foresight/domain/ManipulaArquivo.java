@@ -2,6 +2,7 @@ package br.unirio.pcs.foresight.domain;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -19,9 +20,13 @@ public class ManipulaArquivo {
 
 	public static void adicionaPontuacao(String nomeEntrado, int pts) {
 		try {
-			BufferedWriter file = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE, true)));
-			file.append(nomeEntrado + "|" + pts + "\n");
-			file.close();
+			File file = new File(FILE);
+			if (!file.exists())
+				file.createNewFile();
+//			FileWriter fileWriter = new FileWriter(file.getAbsoluteFile());
+			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE, true)));
+			bufferedWriter.append(nomeEntrado + "|" + pts + "\n");
+			bufferedWriter.close();
 		} catch (FileNotFoundException ex) {
 			System.out.println("Erro: " + ex.getMessage());
 		} catch (IOException ex) {

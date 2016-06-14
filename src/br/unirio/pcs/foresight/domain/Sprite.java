@@ -27,11 +27,11 @@ public abstract class Sprite {
 		return visible;
 	}
 
-	public void setPositionX(int positionX) {
+	public void setPositionX(double positionX) {
 		this.positionX = positionX;
 	}
 	
-	public void setPositionY(int positionY) {
+	public void setPositionY(double positionY) {
 		this.positionY = positionY;
 	}
 	
