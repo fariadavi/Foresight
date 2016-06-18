@@ -1,10 +1,12 @@
 package br.unirio.pcs.foresight.interfaces;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Stroke;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -31,6 +33,9 @@ public class Board extends JPanel implements Runnable {
 	private AudioPlayer firstLevelBackgroundMusic;
 	private Image[] backgroundMenu = new Image[3];
 	private boolean mainMenu = true, password = false, start = false;
+	private boolean newGameIsSelected = true, paswordIsSelected = false, recordesIsSelected = false, quitIsSelected = false;
+	private double buttonFrametime;
+	private float thickness = 4;
 
 	public Board() {
 		setDoubleBuffered(true);
@@ -120,24 +125,51 @@ public class Board extends JPanel implements Runnable {
 			}
 		} else {
 			if(mainMenu) {
-				if(player.key_states[KeyEvent.VK_N]) {
+				buttonFrametime += differenceTime;
+				if(newGameIsSelected && player.key_states[KeyEvent.VK_DOWN]) {
+					newGameIsSelected = false;
+					paswordIsSelected = true;
+					buttonFrametime = 0;
+				} else if (paswordIsSelected && player.key_states[KeyEvent.VK_DOWN] && buttonFrametime > 0.1) {
+					paswordIsSelected = false;
+					recordesIsSelected = true;
+					buttonFrametime = 0;
+				} else if (recordesIsSelected && player.key_states[KeyEvent.VK_DOWN] && buttonFrametime > 0.1) {
+					recordesIsSelected = false;
+					quitIsSelected = true;
+					buttonFrametime = 0;
+				}
+				if(quitIsSelected && player.key_states[KeyEvent.VK_UP] && buttonFrametime > 0.1) {
+					quitIsSelected = false;
+					recordesIsSelected = true;
+					buttonFrametime = 0;
+				} else if (recordesIsSelected && player.key_states[KeyEvent.VK_UP] && buttonFrametime > 0.1) {
+					recordesIsSelected = false;
+					paswordIsSelected = true;
+					buttonFrametime = 0;
+				} else if (paswordIsSelected && player.key_states[KeyEvent.VK_UP] && buttonFrametime > 0.1) {
+					paswordIsSelected = false;
+					newGameIsSelected = true;
+					buttonFrametime = 0;
+				} 
+				if (newGameIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
 					newGame();
-				} else if(player.key_states[KeyEvent.VK_P]) {
+				} else if (paswordIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
 					password = true;
 					mainMenu = false;
-				} else if(player.key_states[KeyEvent.VK_R]) {
+				} else if (recordesIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
 					recordes.ativar();
 					mainMenu = false;
-				} else if(player.key_states[KeyEvent.VK_Q]) {
+				} else if(quitIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
 					System.exit(0);
 				}
 			} else if (password) {
-				if(player.key_states[KeyEvent.VK_B]) {
+				if(player.key_states[KeyEvent.VK_ESCAPE]) {
 					mainMenu = true;
 					password = false;
 				}
 			} else if (recordes.ativo()) {
-				if(player.key_states[KeyEvent.VK_B]) {
+				if(player.key_states[KeyEvent.VK_ESCAPE]) {
 					mainMenu = true;
 					recordes.desativar();;
 				}
@@ -160,11 +192,33 @@ public class Board extends JPanel implements Runnable {
 				graphics2D.drawImage(backgroundMenu[0], 0, -100, null);
 				fontAnimation.draw(graphics2D);
 				if (fontAnimation.getFontSize() == 101){
+					if (newGameIsSelected) {
+						Stroke oldStroke = graphics2D.getStroke();
+						graphics2D.setStroke(new BasicStroke(thickness));
+						graphics2D.drawRoundRect(365, 308, 277, 50, 10, 10);
+						graphics2D.setStroke(oldStroke);
+					} else if (paswordIsSelected) {
+						Stroke oldStroke = graphics2D.getStroke();
+						graphics2D.setStroke(new BasicStroke(thickness));
+						graphics2D.drawRoundRect(365, 358, 277, 50, 10, 10);
+						graphics2D.setStroke(oldStroke);
+					} else if (recordesIsSelected) {
+						Stroke oldStroke = graphics2D.getStroke();
+						graphics2D.setStroke(new BasicStroke(thickness));
+						graphics2D.drawRoundRect(365, 408, 277, 50, 10, 10);
+						graphics2D.setStroke(oldStroke);
+					} else if (quitIsSelected) {
+						Stroke oldStroke = graphics2D.getStroke();
+						graphics2D.setStroke(new BasicStroke(thickness));
+						graphics2D.drawRoundRect(365, 458, 277, 50, 10, 10);
+						graphics2D.setStroke(oldStroke);
+					}
+					graphics2D.setColor(Color.BLACK);
 					graphics2D.setFont(fontMenuOptions);
-					graphics2D.drawString("New Game (Press N)", 240, 350);
-					graphics2D.drawString("Password (Press P)", 240, 400);
-					graphics2D.drawString("Records (Press R)", 240, 450);
-					graphics2D.drawString("Quit (Press Q)", 240, 500);
+					graphics2D.drawString("New Game", 365, 350);
+					graphics2D.drawString("Password", 385, 400);
+					graphics2D.drawString("Records", 405, 450);
+					graphics2D.drawString("Quit", 445, 500);
 				}
 			}
 			else if (password)
