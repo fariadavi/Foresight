@@ -4,27 +4,33 @@ import java.awt.Graphics2D;
 
 public abstract class Sprite {
 
-	protected boolean visible;
-	protected double positionX;
-	protected double positionY;
-	protected double speedX;
-	protected double speedY;
-	protected double gravity = 0.5;
+	protected boolean alive = false;
+	protected double positionX, positionY, speedX, speedY, gravity = 0.5;
+	protected int life;
 	
-	public Sprite(double positionX, double positionY, double speedX, double speedY) {
+	public Sprite(double positionX, double positionY, double speedX, double speedY, int life) {
 		this.positionX = positionX;
 		this.positionY = positionY;
 		this.speedX = speedX;
 		this.speedY = speedY;
-		visible = true;
+		this.life = life;
 	}
 	
 	public void die() {
-		visible = false;
+		alive = false;
+		life = -1;
 	}
 	
-	public boolean isVisible() {
-		return visible;
+	public void spawn() {
+		alive = true;
+	}
+	
+	public boolean isAlive() {
+		return alive;
+	}
+	
+	public void setAlive(boolean alive) {
+		this.alive = alive;
 	}
 
 	public void setPositionX(double positionX) {

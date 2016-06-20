@@ -1,41 +1,41 @@
 package br.unirio.pcs.foresight.interfaces;
 
-import java.awt.BasicStroke;
+/*Fazer um jogo de waves?*/
+
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Stroke;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import br.unirio.pcs.foresight.domain.AudioPlayer;
-import br.unirio.pcs.foresight.domain.FirstLevelTileset;
-import br.unirio.pcs.foresight.domain.FontAnimation;
+import br.unirio.pcs.foresight.domain.Barnacle;
+import br.unirio.pcs.foresight.domain.FirstLevel;
+import br.unirio.pcs.foresight.domain.MainMenu;
+import br.unirio.pcs.foresight.domain.Password;
 import br.unirio.pcs.foresight.domain.PistolProjectile;
-import br.unirio.pcs.foresight.domain.Player;
+import br.unirio.pcs.foresight.domain.Yellow;
 import br.unirio.pcs.foresight.domain.Recordes;
+import br.unirio.pcs.foresight.domain.SecondLevel;
 
 public class Board extends JPanel implements Runnable {
-
+	
 	private static final long serialVersionUID = 1L;
-	private Player player;
+	private Yellow yellow;
+	private Barnacle barnacle;
 	private PistolProjectile[] pistolProjectile = new PistolProjectile[20];
-	private double pistolProjectileFrametime = 0;
+	
+	private MainMenu mainMenu;
+	private Password password;
 	private Recordes recordes;
-	private FirstLevelTileset firstLevel;
-	private FontAnimation fontAnimation;
-	private Font fontMenuOptions = new Font("Verdana", Font.PLAIN, 50);
+	private FirstLevel firstLevel;
+	private SecondLevel secondLevel;
+	
+	private AudioPlayer mainMenuBackgroundMusic;
 	private AudioPlayer firstLevelBackgroundMusic;
-	private Image[] backgroundMenu = new Image[3];
-	private boolean mainMenu = true, password = false, start = false;
-	private boolean newGameIsSelected = true, paswordIsSelected = false, recordesIsSelected = false, quitIsSelected = false;
-	private double buttonFrametime;
-	private float thickness = 4;
+	private AudioPlayer secondLevelBackgroundMusic;
 
 	public Board() {
 		setDoubleBuffered(true);
@@ -71,160 +71,87 @@ public class Board extends JPanel implements Runnable {
 	private class KeyboardAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent event) {
-            player.key_states[event.getKeyCode()] = false;
+            yellow.key_states[event.getKeyCode()] = false;
         }
         
         @Override
         public void keyPressed(KeyEvent event) {
-            player.key_states[event.getKeyCode()] = true;
+            yellow.key_states[event.getKeyCode()] = true;
         }
     }
 	
-	private void newGame() {
-		start = true;
-		mainMenu = false;
-	}
-	
 	private void load() {
         setBackground(Color.BLACK);
-        backgroundMenu[0] = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
-        backgroundMenu[1] = new ImageIcon("images/imagensMenu/passwordMenu.png").getImage();
-        backgroundMenu[2] = new ImageIcon("images/imagensMenu/recordsMenu.png").getImage();
         addKeyListener(new KeyboardAdapter());
-        player = new Player();
+        //Carrega player
+        yellow = new Yellow();
+        barnacle = new Barnacle();
+        //Carrega projetil da pistola
         for (int i = 0; i < 20; i++)
-        	pistolProjectile[i] = new PistolProjectile();
-        recordes = new Recordes();
-        firstLevelBackgroundMusic = new AudioPlayer("C:/Projetos/Foresight-master/soundtrack/HeroicAge.mp3");
-        firstLevel = new FirstLevelTileset(player, firstLevelBackgroundMusic);
-        fontAnimation = new FontAnimation();
+        	pistolProjectile[i] = new PistolProjectile(yellow);
+        //Carrega musicas do background
+        mainMenuBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/MainMenu.mp3");
+        firstLevelBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/FirstLevel.mp3");
+        secondLevelBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/SecondLevel.mp3");
+        //Carrega telas
+        mainMenu = new MainMenu(yellow, mainMenuBackgroundMusic);
+        password = new Password(mainMenu, yellow);
+        recordes = new Recordes(mainMenu, yellow);
+        firstLevel = new FirstLevel(mainMenu, yellow, firstLevelBackgroundMusic);
+        secondLevel = new SecondLevel(mainMenu, yellow, secondLevelBackgroundMusic);
+        mainMenu.setPassword(password);
+        mainMenu.setRecordes(recordes);
+        mainMenu.setFirstLevel(firstLevel);
+        mainMenu.setSecondLevel(secondLevel);
 	}
 	
 	private void update(double differenceTime) {
-		if(start) {
+		if (mainMenu.isActive()) {
+			mainMenu.update(differenceTime);
+		} else if (password.isActive()){
+			password.update(differenceTime);
+		} else if (recordes.isActive()) {
+			recordes.update(differenceTime);
+		} else if (firstLevel.isActive()){
 			firstLevel.update(differenceTime);
-			player.update(differenceTime);
-			pistolProjectileFrametime += differenceTime;
+			yellow.update(differenceTime);
 			for (int i = 0; i < 20; i++){
-				if (player.getProjectile()){
-					if (pistolProjectileFrametime > 0.5){
-						if (!pistolProjectile[i].active()){
-							pistolProjectile[i].activate();
-							pistolProjectile[i].setPositionX(player.getPositionX());
-							pistolProjectile[i].setPositionY(player.getPositionY());
-							pistolProjectileFrametime = 0;
-							break;
-						}
-					}
-				}
-				if (pistolProjectile[i].active()){
-					pistolProjectile[i].update(differenceTime);
-				} else if (pistolProjectile[i].getPositionX() > 900){
-					pistolProjectile[i].deactivate();
-				}
-			}
-		} else {
-			if(mainMenu) {
-				buttonFrametime += differenceTime;
-				if(newGameIsSelected && player.key_states[KeyEvent.VK_DOWN]) {
-					newGameIsSelected = false;
-					paswordIsSelected = true;
-					buttonFrametime = 0;
-				} else if (paswordIsSelected && player.key_states[KeyEvent.VK_DOWN] && buttonFrametime > 0.1) {
-					paswordIsSelected = false;
-					recordesIsSelected = true;
-					buttonFrametime = 0;
-				} else if (recordesIsSelected && player.key_states[KeyEvent.VK_DOWN] && buttonFrametime > 0.1) {
-					recordesIsSelected = false;
-					quitIsSelected = true;
-					buttonFrametime = 0;
-				}
-				if(quitIsSelected && player.key_states[KeyEvent.VK_UP] && buttonFrametime > 0.1) {
-					quitIsSelected = false;
-					recordesIsSelected = true;
-					buttonFrametime = 0;
-				} else if (recordesIsSelected && player.key_states[KeyEvent.VK_UP] && buttonFrametime > 0.1) {
-					recordesIsSelected = false;
-					paswordIsSelected = true;
-					buttonFrametime = 0;
-				} else if (paswordIsSelected && player.key_states[KeyEvent.VK_UP] && buttonFrametime > 0.1) {
-					paswordIsSelected = false;
-					newGameIsSelected = true;
-					buttonFrametime = 0;
-				} 
-				if (newGameIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
-					newGame();
-				} else if (paswordIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
-					password = true;
-					mainMenu = false;
-				} else if (recordesIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
-					recordes.ativar();
-					mainMenu = false;
-				} else if(quitIsSelected && player.key_states[KeyEvent.VK_ENTER]) {
-					System.exit(0);
-				}
-			} else if (password) {
-				if(player.key_states[KeyEvent.VK_ESCAPE]) {
-					mainMenu = true;
-					password = false;
-				}
-			} else if (recordes.ativo()) {
-				if(player.key_states[KeyEvent.VK_ESCAPE]) {
-					mainMenu = true;
-					recordes.desativar();;
-				}
-			}
+				pistolProjectile[i].update(differenceTime);
+			} 
 		}
+		if (!barnacle.isAlive())
+			barnacle.spawn();
+		barnacle.update(differenceTime);
 	}
 	
 	private void draw(Graphics graphics) {
 		
 		Graphics2D graphics2D = (Graphics2D)graphics;
-		if(start) {
+		//Desenha tela do menu
+		if (mainMenu.isActive()) {
+			mainMenu.draw(graphics2D);
+		//Desenha tela do password
+		} else if (password.isActive()) {
+			password.draw(graphics2D);
+		//Desenha tela de recordes
+		} else if (recordes.isActive()) {
+			recordes.draw(graphics2D);
+		//Desenha tela do primeiro level
+		} else if (firstLevel.isActive()) {
 			firstLevel.draw(graphics2D);
-			player.draw(graphics2D);
+			yellow.draw(graphics2D);
 			for (int i = 0; i < 20; i++) {
-				if (pistolProjectile[i].active())
-					pistolProjectile[i].draw(graphics2D);
+				pistolProjectile[i].draw(graphics2D);
 			}
-		} else {
-			if(mainMenu){
-				graphics2D.drawImage(backgroundMenu[0], 0, -100, null);
-				fontAnimation.draw(graphics2D);
-				if (fontAnimation.getFontSize() == 101){
-					if (newGameIsSelected) {
-						Stroke oldStroke = graphics2D.getStroke();
-						graphics2D.setStroke(new BasicStroke(thickness));
-						graphics2D.drawRoundRect(365, 308, 277, 50, 10, 10);
-						graphics2D.setStroke(oldStroke);
-					} else if (paswordIsSelected) {
-						Stroke oldStroke = graphics2D.getStroke();
-						graphics2D.setStroke(new BasicStroke(thickness));
-						graphics2D.drawRoundRect(365, 358, 277, 50, 10, 10);
-						graphics2D.setStroke(oldStroke);
-					} else if (recordesIsSelected) {
-						Stroke oldStroke = graphics2D.getStroke();
-						graphics2D.setStroke(new BasicStroke(thickness));
-						graphics2D.drawRoundRect(365, 408, 277, 50, 10, 10);
-						graphics2D.setStroke(oldStroke);
-					} else if (quitIsSelected) {
-						Stroke oldStroke = graphics2D.getStroke();
-						graphics2D.setStroke(new BasicStroke(thickness));
-						graphics2D.drawRoundRect(365, 458, 277, 50, 10, 10);
-						graphics2D.setStroke(oldStroke);
-					}
-					graphics2D.setColor(Color.BLACK);
-					graphics2D.setFont(fontMenuOptions);
-					graphics2D.drawString("New Game", 365, 350);
-					graphics2D.drawString("Password", 385, 400);
-					graphics2D.drawString("Records", 405, 450);
-					graphics2D.drawString("Quit", 445, 500);
-				}
+			barnacle.draw(graphics2D);
+		//Desenha tela do segundo level
+		} else if (secondLevel.isActive()) {
+			secondLevel.draw(graphics2D);
+			yellow.draw(graphics2D);
+			for (int i = 0; i < 20; i++) {
+				pistolProjectile[i].draw(graphics2D);
 			}
-			else if (password)
-				graphics2D.drawImage(backgroundMenu[1], 0, 0, null);
-			else if (recordes.ativo())
-				recordes.draw(graphics2D);
 		}
+		
 	}
 }
