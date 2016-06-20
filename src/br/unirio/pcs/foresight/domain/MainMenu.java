@@ -35,11 +35,11 @@ public class MainMenu {
 
 	public MainMenu (Yellow yellow, AudioPlayer mainMenuBackgroundMusic) {
 
+		this.yellow = yellow;
+		this.mainMenuBackgroundMusic = mainMenuBackgroundMusic;
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
 		positionX = 0;
 		positionY = -200;
-		this.yellow = yellow;
-		this.mainMenuBackgroundMusic = mainMenuBackgroundMusic;
 	}
 	
 	public void update(double differenceTime) {
@@ -80,6 +80,7 @@ public class MainMenu {
 			if (newGameIsSelected){
 				deactivateScreen();
 				firstLevel.activateScreen();
+				mainMenuBackgroundMusic.stop();
 			} else if (paswordIsSelected){
 				deactivateScreen();
 				password.activateScreen();
@@ -149,7 +150,7 @@ public class MainMenu {
 	
 	public void activateScreen() {
 		currentlyOnScreen = true;
-		mainMenuBackgroundMusic.play();
+		mainMenuBackgroundMusic.playInLoop();
 	}
 	
 	public boolean isActive() {

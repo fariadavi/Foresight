@@ -23,8 +23,6 @@ public class SecondLevel {
 		this.secondLevelBackgroundMusic = secondLevelBackgroundMusic;
 		for (int i = 0; i < 10; i++)
 			background[i] = new ImageIcon("images/background/colored_desert.png").getImage();
-		if (currentlyOnScreen)
-			secondLevelBackgroundMusic.play();
 		positionX = 0;
 		positionY = -200;
 	}
@@ -57,7 +55,7 @@ public class SecondLevel {
 	
 	public void activateScreen() {
 		currentlyOnScreen = true;
-		secondLevelBackgroundMusic.play();
+		secondLevelBackgroundMusic.playInLoop();
 	}
 	
 	public boolean isActive() {

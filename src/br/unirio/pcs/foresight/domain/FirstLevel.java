@@ -56,7 +56,7 @@ public class FirstLevel {
 	
 	public void activateScreen() {
 		currentlyOnScreen = true;
-		firstLevelBackgroundMusic.play();
+		firstLevelBackgroundMusic.playInLoop();
 	}
 	
 	public boolean isActive() {

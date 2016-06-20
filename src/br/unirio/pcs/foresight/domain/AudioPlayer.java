@@ -27,13 +27,21 @@ public class AudioPlayer {
 
 	}
 
-	public void play() {
+	public void playInLoop() {
 		if (clip == null)
 			return;
 		stop();
 		clip.setFramePosition(0);
 		clip.start();
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	
+	public void play(){
+		if (clip == null)
+			return;
+		stop();
+		clip.setFramePosition(0);
+		clip.start();
 	}
 
 	public void stop() {
