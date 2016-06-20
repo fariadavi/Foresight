@@ -8,6 +8,8 @@ import javax.swing.ImageIcon;
 
 public class FirstLevel {
 
+	private static final int INITIAL_MAP_POS = 0;
+	private static final int FINAL_MAP_POS = -1024 * 9;
 	private Image[] background = new Image[10];
 	private double positionX;
 	private double positionY;
@@ -30,10 +32,11 @@ public class FirstLevel {
 	public void update(double differenceTime) {
 		
 		if (player.getPositionX() > 400) {
-			positionX -= player.getSpeedX() * differenceTime;
-			player.setPositionX(player.getPositionX() - player.getSpeedX() * differenceTime);
+			if (positionX != FINAL_MAP_POS)
+				positionX -= player.getSpeedX() * differenceTime;
+				player.setPositionX(player.getPositionX() - player.getSpeedX() * differenceTime);
 		} else if (player.getPositionX() < 395){
-			if (positionX != 0){
+			if (positionX != INITIAL_MAP_POS){
 				positionX += player.getSpeedX() * differenceTime;
 				player.setPositionX(player.getPositionX() + player.getSpeedX() * differenceTime);
 			}
@@ -47,6 +50,7 @@ public class FirstLevel {
 	public void draw(Graphics2D graphics2D) {
 		for (int i = 0; i < 10; i++)
 			graphics2D.drawImage(background[i], (int) positionX + (i * 1024), (int) positionY + i, null);
+		graphics2D.drawString(String.valueOf(positionX), 100, 100);
 	}
 	
 	public void deactivateScreen() {
