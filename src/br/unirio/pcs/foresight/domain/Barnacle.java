@@ -15,9 +15,8 @@ public class Barnacle extends Sprite {
 	private Image[] barnacleSprite = new Image[2];
 	private int steps = 0;
 	private double frametime = 0;
-	
-	public Barnacle() {
 		
+	public Barnacle() {
 		super(BARNACLE_POSITION_X, BARNACLE_POSITION_Y, BARNACLE_RUN_SPEED, BARNACLE_JUMP_SPEED, BARNACLE_LIFE);
 		barnacleSprite[0] = new ImageIcon("images/enemys/barnacle.png").getImage();
 		barnacleSprite[1] = new ImageIcon("images/enemys/barnacle_bite.png").getImage();
@@ -26,9 +25,9 @@ public class Barnacle extends Sprite {
 	@Override
 	public void update(double differenceTime) {
 		frametime += differenceTime;
-		if (frametime > 0.3 && steps < 1){
+		if (frametime > 0.2 && steps < 1){
 			steps++;
-		} else if (frametime > 0.6 && steps > 0){
+		} else if (frametime > 0.4 && steps > 0){
 			steps--;
 			frametime = 0;
 		}

@@ -5,9 +5,12 @@ import java.awt.Image;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
 
 public class Password {
 
+	private JTextField textField;
+	private String inputText = "";
 	private MainMenu mainMenu;
 	private Yellow player;
 	private Image background;
@@ -17,6 +20,8 @@ public class Password {
 	public Password (MainMenu mainMenu, Yellow player) {
 		
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
+		textField = new JTextField(10);
+		inputText.concat(textField.getText());
 		positionX = 0;
 		positionY = -200;
 		this.mainMenu = mainMenu;
@@ -33,6 +38,7 @@ public class Password {
 	
 	public void draw(Graphics2D graphics2D) {
 		graphics2D.drawImage(background, (int) positionX, (int) positionY, null);
+		textField.paint(graphics2D);
 	}
 	
 	public void deactivateScreen() {

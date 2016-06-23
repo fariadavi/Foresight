@@ -12,24 +12,30 @@ import javax.swing.JPanel;
 
 import br.unirio.pcs.foresight.domain.AudioPlayer;
 import br.unirio.pcs.foresight.domain.Barnacle;
+import br.unirio.pcs.foresight.domain.Bee;
 import br.unirio.pcs.foresight.domain.FirstLevel;
+import br.unirio.pcs.foresight.domain.Fly;
 import br.unirio.pcs.foresight.domain.MainMenu;
 import br.unirio.pcs.foresight.domain.Password;
 import br.unirio.pcs.foresight.domain.PistolProjectile;
-import br.unirio.pcs.foresight.domain.Yellow;
-import br.unirio.pcs.foresight.domain.Recordes;
+import br.unirio.pcs.foresight.domain.Records;
 import br.unirio.pcs.foresight.domain.SecondLevel;
+import br.unirio.pcs.foresight.domain.SnakeLava;
+import br.unirio.pcs.foresight.domain.Yellow;
 
 public class Board extends JPanel implements Runnable {
 	
 	private static final long serialVersionUID = 1L;
 	private Yellow yellow;
+	private Bee bee;
+	private Fly fly;
+	private SnakeLava snakeLava;
 	private Barnacle barnacle;
-	private PistolProjectile[] pistolProjectile = new PistolProjectile[20];
+	private PistolProjectile pistolProjectile;
 	
 	private MainMenu mainMenu;
 	private Password password;
-	private Recordes recordes;
+	private Records recordes;
 	private FirstLevel firstLevel;
 	private SecondLevel secondLevel;
 	
@@ -83,20 +89,23 @@ public class Board extends JPanel implements Runnable {
 	private void load() {
         setBackground(Color.BLACK);
         addKeyListener(new KeyboardAdapter());
-        //Carrega player
+        
         yellow = new Yellow();
+        
+        bee = new Bee();
+        fly = new Fly();
+        snakeLava = new SnakeLava();
         barnacle = new Barnacle();
-        //Carrega projetil da pistola
-        for (int i = 0; i < 20; i++)
-        	pistolProjectile[i] = new PistolProjectile(yellow);
-        //Carrega musicas do background
-        mainMenuBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/MainMenu.mp3");
-        firstLevelBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/FirstLevel.mp3");
-        secondLevelBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/SecondLevel.mp3");
-        //Carrega telas
+        
+        pistolProjectile = new PistolProjectile(yellow, barnacle);
+        
+        mainMenuBackgroundMusic = new AudioPlayer("F:/Nova pasta/Foresight-master2.0/soundtrack/MainMenu.mp3");
+        firstLevelBackgroundMusic = new AudioPlayer("F:/Nova pasta/Foresight-master2.0/soundtrack/FirstLevel.mp3");
+        secondLevelBackgroundMusic = new AudioPlayer("F:/Nova pasta/Foresight-master2.0/soundtrack/SecondLevel.mp3");
+        
         mainMenu = new MainMenu(yellow, mainMenuBackgroundMusic);
         password = new Password(mainMenu, yellow);
-        recordes = new Recordes(mainMenu, yellow);
+        recordes = new Records(mainMenu, yellow);
         firstLevel = new FirstLevel(mainMenu, yellow, firstLevelBackgroundMusic);
         secondLevel = new SecondLevel(mainMenu, yellow, secondLevelBackgroundMusic);
         mainMenu.setPassword(password);
@@ -115,13 +124,20 @@ public class Board extends JPanel implements Runnable {
 		} else if (firstLevel.isActive()){
 			firstLevel.update(differenceTime);
 			yellow.update(differenceTime);
-			for (int i = 0; i < 20; i++){
-				pistolProjectile[i].update(differenceTime);
-			} 
+			pistolProjectile.update(differenceTime);
 		}
 		if (!barnacle.isAlive())
 			barnacle.spawn();
 		barnacle.update(differenceTime);
+		if (!bee.isAlive())
+			bee.spawn();
+		bee.update(differenceTime);
+		if (!fly.isAlive())
+			fly.spawn();
+		fly.update(differenceTime);
+		if (!snakeLava.isAlive())
+			snakeLava.spawn();
+		snakeLava.update(differenceTime);
 	}
 	
 	private void draw(Graphics graphics) {
@@ -140,18 +156,16 @@ public class Board extends JPanel implements Runnable {
 		} else if (firstLevel.isActive()) {
 			firstLevel.draw(graphics2D);
 			yellow.draw(graphics2D);
-			for (int i = 0; i < 20; i++) {
-				pistolProjectile[i].draw(graphics2D);
-			}
+			bee.draw(graphics2D);
+			fly.draw(graphics2D);
+			snakeLava.draw(graphics2D);
 			barnacle.draw(graphics2D);
+			pistolProjectile.draw(graphics2D);
 		//Desenha tela do segundo level
 		} else if (secondLevel.isActive()) {
 			secondLevel.draw(graphics2D);
 			yellow.draw(graphics2D);
-			for (int i = 0; i < 20; i++) {
-				pistolProjectile[i].draw(graphics2D);
-			}
+			pistolProjectile.draw(graphics2D);
 		}
-		
 	}
 }

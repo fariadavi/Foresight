@@ -21,20 +21,21 @@ public class FirstLevel {
 	public FirstLevel (MainMenu mainMenu, Yellow player, AudioPlayer firstLevelBackgroundMusic) {
 		
 		this.mainMenu = mainMenu;
+		this.player = player;
 		this.firstLevelBackgroundMusic = firstLevelBackgroundMusic;
 		for (int i = 0; i < 10; i++)
 			background[i] = new ImageIcon("images/background/colored_grass.png").getImage();
 		positionX = 0;
 		positionY = -200;
-		this.player = player;
 	}
 	
 	public void update(double differenceTime) {
 		
 		if (player.getPositionX() > 400) {
 			if (positionX != FINAL_MAP_POS)
-				positionX -= player.getSpeedX() * differenceTime;
-				player.setPositionX(player.getPositionX() - player.getSpeedX() * differenceTime);
+				positionX -= 250 * differenceTime;
+			player.setSpeedX((double) 1);
+//			player.setPositionX(player.getPositionX() - player.getSpeedX() * differenceTime);
 		} else if (player.getPositionX() < 395){
 			if (positionX != INITIAL_MAP_POS){
 				positionX += player.getSpeedX() * differenceTime;
@@ -50,7 +51,10 @@ public class FirstLevel {
 	public void draw(Graphics2D graphics2D) {
 		for (int i = 0; i < 10; i++)
 			graphics2D.drawImage(background[i], (int) positionX + (i * 1024), (int) positionY + i, null);
-		graphics2D.drawString(String.valueOf(positionX), 100, 100);
+	}
+	
+	public double getPositionX(){
+		return positionX;
 	}
 	
 	public void deactivateScreen() {

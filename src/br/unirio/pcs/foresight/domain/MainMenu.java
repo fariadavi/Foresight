@@ -15,7 +15,7 @@ public class MainMenu {
 	private Yellow yellow;
 	
 	private Password password;
-	private Recordes recordes;
+	private Records recordes;
 	private FirstLevel firstLevel;
 	@SuppressWarnings("unused")
 	private SecondLevel secondLevel;
@@ -38,6 +38,9 @@ public class MainMenu {
 		this.yellow = yellow;
 		this.mainMenuBackgroundMusic = mainMenuBackgroundMusic;
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
+		if (currentlyOnScreen) {
+			mainMenuBackgroundMusic.playInLoop();
+		}
 		positionX = 0;
 		positionY = -200;
 	}
@@ -132,7 +135,7 @@ public class MainMenu {
 		this.password = password;
 	}
 
-	public void setRecordes(Recordes recordes) {
+	public void setRecordes(Records recordes) {
 		this.recordes = recordes;
 	}
 
