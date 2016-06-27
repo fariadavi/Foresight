@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Fly extends Sprite {
+public class Fly extends Enemies {
 
 	private static final int FLY_POSITION_X = 800;
 	private static final int FLY_POSITION_Y = 250;

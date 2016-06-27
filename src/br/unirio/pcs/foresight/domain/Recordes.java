@@ -9,23 +9,23 @@ import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 
 public class Recordes {
-	
-	private Yellow player;
+
+	private InputListener inputListener; 
 	private MainMenu mainMenu;
 	private double px = 365, py = 610;
 	private String[] nomes;
 	private int[] pts;
 	private boolean currentlyOnScreen = false;
 
-	public Recordes(MainMenu mainMenu, Yellow player) {
+	public Recordes(MainMenu mainMenu, InputListener input) {
 		this.mainMenu = mainMenu;
-		this.player = player;
+		this.inputListener = input;
 	}
 
 	public void update(double dt) {
 		if (py > 80)
 			py -= 180 * dt;
-		if (player.key_states[KeyEvent.VK_ESCAPE]){
+		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]){
 			deactivateScreen();
 			mainMenu.activateScreen();;
 		}

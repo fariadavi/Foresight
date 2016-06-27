@@ -16,14 +16,14 @@ public class Yellow extends Sprite {
 	private Image[] yellowSprite = new Image[10];
 	private Image[] yellowGunSprite = new Image[2];
 	private Image[] hudYellow = new Image[15];
-	public boolean[] key_states = new boolean[256];
+	private InputListener inputListener;
 	private double frametime = 0;
 	private boolean Projectile;
 	private int steps = 0;
 	private double jumpVelocity = 0.0;
 	private boolean onGround;
 
-	public Yellow() {
+	public Yellow() { //mudar Yellow para player e criar classes que extendem para implementar os diversos personagens
 		super(YELLOW_POSITION_X, YELLOW_POSITION_Y, YELLOW_RUN_SPEED, YELLOW_JUMP_SPEED, YELLOW_LIFE);
 		yellowSprite[0] = new ImageIcon("images/characters/yellow/alienYellow_stand_right.png").getImage();
 		yellowSprite[1] = new ImageIcon("images/characters/yellow/alienYellow_walk_right0.png").getImage();
@@ -42,7 +42,7 @@ public class Yellow extends Sprite {
 		
 		hudYellow[0] = new ImageIcon("images/HUD/hudPlayer_yellow.png").getImage();
 		
-		hudYellow[1] = new ImageIcon("images/HUD/hudHeart_full.png").getImage();
+		hudYellow[1] = new ImageIcon("images/HUD/hudHeart_full.png").getImage(); //Separar classe de HUD
 		hudYellow[2] = new ImageIcon("images/HUD/hudHeart_half.png").getImage();
 		hudYellow[3] = new ImageIcon("images/HUD/hudHeart_empty.png").getImage();
 		
@@ -92,7 +92,7 @@ public class Yellow extends Sprite {
 		}
 
 		// Player movements controller
-		if (key_states[KeyEvent.VK_UP]) {
+		if (inputListener.getKeyStates()[KeyEvent.VK_UP]) {
 			if (onGround) {
 				jumpVelocity = -1 * speedY * differenceTime;
 				onGround = false;
@@ -101,7 +101,7 @@ public class Yellow extends Sprite {
 				steps = 3;
 			else if (horizontalDirection == -1 || (steps >= 5 && steps < 10))
 				steps = 8;
-			else if (!(onGround) && key_states[KeyEvent.VK_RIGHT])
+			else if (!(onGround) && inputListener.getKeyStates()[KeyEvent.VK_RIGHT])
 				steps = 3;
 		} 
 
@@ -120,13 +120,13 @@ public class Yellow extends Sprite {
 		onGround = positionY >= 600;
 
 		// Player shots controller
-		if ((key_states[KeyEvent.VK_CONTROL])) {
+		if ((inputListener.getKeyStates()[KeyEvent.VK_CONTROL])) {
 			Projectile = true;
 		}
 	}
 	
 	public int getHorizontalDirection() {
-		return key_states[KeyEvent.VK_RIGHT] ? 1 : (key_states[KeyEvent.VK_LEFT] ? -1 : 0);
+		return inputListener.getKeyStates()[KeyEvent.VK_RIGHT] ? 1 : (inputListener.getKeyStates()[KeyEvent.VK_LEFT] ? -1 : 0);
 	}
 
 	@Override

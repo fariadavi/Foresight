@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Barnacle extends Sprite {
+public class Barnacle extends Enemies {
 
 	private static final int BARNACLE_POSITION_X = 500;
 	private static final int BARNACLE_POSITION_Y = 625;

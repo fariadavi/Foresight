@@ -10,38 +10,32 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JPanel;
 
-import br.unirio.pcs.foresight.domain.AudioPlayer;
-import br.unirio.pcs.foresight.domain.Barnacle;
-import br.unirio.pcs.foresight.domain.Bee;
 import br.unirio.pcs.foresight.domain.FirstLevel;
-import br.unirio.pcs.foresight.domain.Fly;
+import br.unirio.pcs.foresight.domain.InputListener;
 import br.unirio.pcs.foresight.domain.MainMenu;
-import br.unirio.pcs.foresight.domain.Password;
 import br.unirio.pcs.foresight.domain.PistolProjectile;
-import br.unirio.pcs.foresight.domain.Records;
 import br.unirio.pcs.foresight.domain.SecondLevel;
-import br.unirio.pcs.foresight.domain.SnakeLava;
-import br.unirio.pcs.foresight.domain.Yellow;
 
 public class Board extends JPanel implements Runnable {
 	
 	private static final long serialVersionUID = 1L;
-	private Yellow yellow;
-	private Bee bee;
-	private Fly fly;
-	private SnakeLava snakeLava;
-	private Barnacle barnacle;
+//	private Yellow yellow;
+//	private Bee bee;
+//	private Fly fly;
+//	private SnakeLava snakeLava;
+//	private Barnacle barnacle;
 	private PistolProjectile pistolProjectile;
+	private InputListener inputListener;
 	
 	private MainMenu mainMenu;
-	private Password password;
-	private Records recordes;
+//	private Password password;
+//	private Records recordes;
 	private FirstLevel firstLevel;
 	private SecondLevel secondLevel;
 	
-	private AudioPlayer mainMenuBackgroundMusic;
-	private AudioPlayer firstLevelBackgroundMusic;
-	private AudioPlayer secondLevelBackgroundMusic;
+//	private AudioPlayer mainMenuBackgroundMusic; //passar audios pra dentro das classes proprietarias? MainMenu
+//	private AudioPlayer firstLevelBackgroundMusic; //passar para FirstLevel 
+//	private AudioPlayer secondLevelBackgroundMusic; //passar para SecondLevel
 
 	public Board() {
 		setDoubleBuffered(true);
@@ -77,12 +71,12 @@ public class Board extends JPanel implements Runnable {
 	private class KeyboardAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent event) {
-            yellow.key_states[event.getKeyCode()] = false;
+            inputListener.getKeyStates()[event.getKeyCode()] = false;
         }
         
         @Override
         public void keyPressed(KeyEvent event) {
-            yellow.key_states[event.getKeyCode()] = true;
+        	inputListener.getKeyStates()[event.getKeyCode()] = true;
         }
     }
 	
@@ -90,26 +84,28 @@ public class Board extends JPanel implements Runnable {
         setBackground(Color.BLACK);
         addKeyListener(new KeyboardAdapter());
         
-        yellow = new Yellow();
+        inputListener = new InputListener();
+//        yellow = new Yellow();
         
-        bee = new Bee();
-        fly = new Fly();
-        snakeLava = new SnakeLava();
-        barnacle = new Barnacle();
+//        bee = new Bee();
+//        fly = new Fly();
+//        snakeLava = new SnakeLava();
+//        barnacle = new Barnacle();
         
-        pistolProjectile = new PistolProjectile(yellow, barnacle);
+//        pistolProjectile = new PistolProjectile(yellow, barnacle);
         
-        mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
-        firstLevelBackgroundMusic = new AudioPlayer("soundtrack/FirstLevel.mp3");
-        secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
+//        mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
+//        firstLevelBackgroundMusic = new AudioPlayer("soundtrack/FirstLevel.mp3");
+//        secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
         
-        mainMenu = new MainMenu(yellow, mainMenuBackgroundMusic);
-        password = new Password(mainMenu, yellow);
-        recordes = new Records(mainMenu, yellow);
-        firstLevel = new FirstLevel(mainMenu, yellow, firstLevelBackgroundMusic);
-        secondLevel = new SecondLevel(mainMenu, yellow, secondLevelBackgroundMusic);
-        mainMenu.setPassword(password);
-        mainMenu.setRecordes(recordes);
+        mainMenu = new MainMenu(inputListener);
+//        password = new Password(mainMenu, inputListener);
+//        recordes = new Records(mainMenu, inputListener);
+        firstLevel = new FirstLevel(mainMenu, inputListener);
+        secondLevel = new SecondLevel(mainMenu, inputListener);
+        
+//        mainMenu.setPassword(password);
+//        mainMenu.setRecordes(recordes);
         mainMenu.setFirstLevel(firstLevel);
         mainMenu.setSecondLevel(secondLevel);
 	}
@@ -117,27 +113,27 @@ public class Board extends JPanel implements Runnable {
 	private void update(double differenceTime) {
 		if (mainMenu.isActive()) {
 			mainMenu.update(differenceTime);
-		} else if (password.isActive()){
-			password.update(differenceTime);
-		} else if (recordes.isActive()) {
-			recordes.update(differenceTime);
+//		} else if (password.isActive()){
+//			password.update(differenceTime);
+//		} else if (recordes.isActive()) {
+//			recordes.update(differenceTime);
 		} else if (firstLevel.isActive()){
 			firstLevel.update(differenceTime);
-			yellow.update(differenceTime);
+//			yellow.update(differenceTime);
 			pistolProjectile.update(differenceTime);
 		}
-		if (!barnacle.isAlive())
-			barnacle.spawn();
-		barnacle.update(differenceTime);
-		if (!bee.isAlive())
-			bee.spawn();
-		bee.update(differenceTime);
-		if (!fly.isAlive())
-			fly.spawn();
-		fly.update(differenceTime);
-		if (!snakeLava.isAlive())
-			snakeLava.spawn();
-		snakeLava.update(differenceTime);
+//		if (!barnacle.isAlive())
+//			barnacle.spawn();
+//		barnacle.update(differenceTime);
+//		if (!bee.isAlive())
+//			bee.spawn();
+//		bee.update(differenceTime);
+//		if (!fly.isAlive())
+//			fly.spawn();
+//		fly.update(differenceTime);
+//		if (!snakeLava.isAlive())
+//			snakeLava.spawn();
+//		snakeLava.update(differenceTime);
 	}
 	
 	private void draw(Graphics graphics) {
@@ -147,24 +143,24 @@ public class Board extends JPanel implements Runnable {
 		if (mainMenu.isActive()) {
 			mainMenu.draw(graphics2D);
 		//Desenha tela do password
-		} else if (password.isActive()) {
-			password.draw(graphics2D);
+//		} else if (password.isActive()) {
+//			password.draw(graphics2D);
 		//Desenha tela de recordes
-		} else if (recordes.isActive()) {
-			recordes.draw(graphics2D);
+//		} else if (recordes.isActive()) {
+//			recordes.draw(graphics2D);
 		//Desenha tela do primeiro level
 		} else if (firstLevel.isActive()) {
 			firstLevel.draw(graphics2D);
-			yellow.draw(graphics2D);
-			bee.draw(graphics2D);
-			fly.draw(graphics2D);
-			snakeLava.draw(graphics2D);
-			barnacle.draw(graphics2D);
+//			yellow.draw(graphics2D);
+//			bee.draw(graphics2D);
+//			fly.draw(graphics2D);
+//			snakeLava.draw(graphics2D);
+//			barnacle.draw(graphics2D);
 			pistolProjectile.draw(graphics2D);
 		//Desenha tela do segundo level
 		} else if (secondLevel.isActive()) {
 			secondLevel.draw(graphics2D);
-			yellow.draw(graphics2D);
+//			yellow.draw(graphics2D);
 			pistolProjectile.draw(graphics2D);
 		}
 	}

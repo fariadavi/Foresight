@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class SnakeLava extends Sprite {
+public class SnakeLava extends Enemies {
 	private static final int SNAKELAVA_POSITION_X = 800;
 	private static final int SNAKELAVA_POSITION_Y = 500;
 	private static final int SNAKELAVA_RUN_SPEED = 100;

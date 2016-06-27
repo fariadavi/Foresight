@@ -12,10 +12,12 @@ import javax.swing.ImageIcon;
 
 public class MainMenu {
 	
-	private Yellow yellow;
+	private InputListener inputListener;
+	private AudioPlayer mainMenuBackgroundMusic;
 	
 	private Password password;
 	private Records recordes;
+	
 	private FirstLevel firstLevel;
 	@SuppressWarnings("unused")
 	private SecondLevel secondLevel;
@@ -30,19 +32,18 @@ public class MainMenu {
 	private boolean newGameIsSelected = true, paswordIsSelected, 
 			recordesIsSelected, quitIsSelected, currentlyOnScreen = true;
 
-	private AudioPlayer mainMenuBackgroundMusic;
-	
-
-	public MainMenu (Yellow yellow, AudioPlayer mainMenuBackgroundMusic) {
-
-		this.yellow = yellow;
-		this.mainMenuBackgroundMusic = mainMenuBackgroundMusic;
+	public MainMenu (InputListener input) {
+		this.inputListener = input;
+		this.password = new Password(this, input);
+		this.recordes = new Records(this, input);
+		
+		this.mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
-		if (currentlyOnScreen) {
-			mainMenuBackgroundMusic.playInLoop();
-		}
+		
 		positionX = 0;
 		positionY = -200;
+		
+		activateScreen();
 	}
 	
 	public void update(double differenceTime) {
@@ -131,13 +132,13 @@ public class MainMenu {
 		
 	}
 
-	public void setPassword(Password password) {
-		this.password = password;
-	}
-
-	public void setRecordes(Records recordes) {
-		this.recordes = recordes;
-	}
+//	public void setPassword(Password password) {
+//		this.password = password;
+//	}
+//
+//	public void setRecordes(Records recordes) {
+//		this.recordes = recordes;
+//	}
 
 	public void setFirstLevel(FirstLevel firstLevel) {
 		this.firstLevel = firstLevel;
@@ -161,15 +162,15 @@ public class MainMenu {
 	}
 	
 	private boolean pressEnter() {
-		return yellow.key_states[KeyEvent.VK_ENTER];
+		return inputListener.getKeyStates()[KeyEvent.VK_ENTER];
 	}
 
 	private boolean pressUp() {
-		return yellow.key_states[KeyEvent.VK_UP];
+		return inputListener.getKeyStates()[KeyEvent.VK_UP];
 	}
 
 	private boolean pressDown() {
-		return yellow.key_states[KeyEvent.VK_DOWN];
+		return inputListener.getKeyStates()[KeyEvent.VK_DOWN];
 	}
 	
 }

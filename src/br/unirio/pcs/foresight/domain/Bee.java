@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Bee extends Sprite {
+public class Bee extends Enemies {
 
 	private static final int BEE_POSITION_X = 600;
 	private static final int BEE_POSITION_Y = 100;

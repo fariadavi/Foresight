@@ -12,22 +12,22 @@ import java.util.List;
 import br.unirio.pcs.foresight.domain.dto.Score;
 
 public class Records {
-	
-	private Yellow yellow;
+
+	private InputListener inputListener; 
 	private MainMenu mainMenu;
 	private List<Score> scores;
 	private double positionX = 365, positionY = 610;
 	private boolean currentlyOnScreen = false;
 
-	public Records(MainMenu mainMenu, Yellow yellow) {
+	public Records(MainMenu mainMenu, InputListener input) {
 		this.mainMenu = mainMenu;
-		this.yellow = yellow;
+		this.inputListener = input;
 	}
 
 	public void update(double differenceTime) {
 		if (positionY > 80)
 			positionY -= 180 * differenceTime;
-		if (yellow.key_states[KeyEvent.VK_ESCAPE]) {
+		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]) {
 			deactivateScreen();
 			mainMenu.activateScreen();
 		}

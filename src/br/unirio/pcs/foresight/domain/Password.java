@@ -9,28 +9,28 @@ import javax.swing.JTextField;
 
 public class Password {
 
+	private InputListener inputListener;
+	
 	private JTextField textField;
 	private String inputText = "";
 	private MainMenu mainMenu;
-	private Yellow player;
 	private Image background;
 	private double positionX, positionY;
 	private boolean currentlyOnScreen = false;
 	
-	public Password (MainMenu mainMenu, Yellow player) {
+	public Password (MainMenu mainMenu, InputListener input) {
+		this.inputListener = input;
 		
-		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
-		textField = new JTextField(10);
-		inputText.concat(textField.getText());
-		positionX = 0;
-		positionY = -200;
+		this.background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
+		this.textField = new JTextField(10);
+		this.inputText.concat(textField.getText());
+		this.positionX = 0;
+		this.positionY = -200;
 		this.mainMenu = mainMenu;
-		this.player = player;
-		
 	}
 
 	public void update(double differenceTime) {
-		if (player.key_states[KeyEvent.VK_ESCAPE]){
+		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]){
 			deactivateScreen();
 			mainMenu.activateScreen();
 		}
