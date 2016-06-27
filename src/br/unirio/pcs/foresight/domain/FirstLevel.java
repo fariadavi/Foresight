@@ -8,40 +8,34 @@ import javax.swing.ImageIcon;
 
 public class FirstLevel {
 
-	private static final int INITIAL_MAP_POS = 0;
-	private static final int FINAL_MAP_POS = -1024 * 9;
-	private Image[] background = new Image[10];
+//	private static final int INITIAL_MAP_POS = 0;
+//	private static final int FINAL_MAP_POS = -1024 * 9;
+	private Image background;
 	private double positionX;
 	private double positionY;
 	private Yellow player;
 	public boolean currentlyOnScreen;
 	private AudioPlayer firstLevelBackgroundMusic;
 	private MainMenu mainMenu;
+	private TileSheet tileSheet;
 
-	public FirstLevel (MainMenu mainMenu, Yellow player, AudioPlayer firstLevelBackgroundMusic) {
+	public FirstLevel(MainMenu mainMenu, Yellow player, AudioPlayer firstLevelBackgroundMusic) {
 		
 		this.mainMenu = mainMenu;
 		this.player = player;
 		this.firstLevelBackgroundMusic = firstLevelBackgroundMusic;
-		for (int i = 0; i < 10; i++)
-			background[i] = new ImageIcon("images/background/colored_grass.png").getImage();
-		positionX = 0;
-		positionY = -200;
+		this.background = new ImageIcon("images/background/colored_grass.png").getImage();
+		this.positionX = 0;
+		this.positionY = -80;
+		this.tileSheet = TileSheet.getFromFile("firstLevelMap.txt", "images/platformer-extendedtiles-0/PNG Grass/Spritesheet/tilesheetGrass.png", player);
 	}
 	
 	public void update(double differenceTime) {
+		tileSheet.update(differenceTime);
 		
-		if (player.getPositionX() > 400) {
-			if (positionX != FINAL_MAP_POS)
-				positionX -= 250 * differenceTime;
-			player.setSpeedX((double) 1);
-//			player.setPositionX(player.getPositionX() - player.getSpeedX() * differenceTime);
-		} else if (player.getPositionX() < 395){
-			if (positionX != INITIAL_MAP_POS){
-				positionX += player.getSpeedX() * differenceTime;
-				player.setPositionX(player.getPositionX() + player.getSpeedX() * differenceTime);
-			}
-		}
+		if (tileSheet.moveMap())
+			positionX += ((player.getHorizontalDirection() * -1) * (player.getSpeedX()/6) * differenceTime);
+			
 		if (player.key_states[KeyEvent.VK_ESCAPE]){
 			deactivateScreen();
 			mainMenu.activateScreen();
@@ -49,12 +43,9 @@ public class FirstLevel {
 	}
 
 	public void draw(Graphics2D graphics2D) {
-		for (int i = 0; i < 10; i++)
-			graphics2D.drawImage(background[i], (int) positionX + (i * 1024), (int) positionY + i, null);
-	}
-	
-	public double getPositionX(){
-		return positionX;
+		for (int i = 0; i < 2; i++)
+			graphics2D.drawImage(background, (int) Math.round(positionX + (i * background.getWidth(null))), (int) Math.round(positionY), null);
+		tileSheet.draw(graphics2D);
 	}
 	
 	public void deactivateScreen() {

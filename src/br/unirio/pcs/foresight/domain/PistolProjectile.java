@@ -5,7 +5,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class PistolProjectile extends Projectile{
+public class PistolProjectile extends Projectile {
 
 	private static final int BULLET_SPEED = 500;
 	private Yellow yellow;
@@ -14,7 +14,7 @@ public class PistolProjectile extends Projectile{
 	private double pistolProjectileFrametime = 0;
 	
 	public PistolProjectile(Yellow yellow, Barnacle barnacle) {
-		super();
+		super(BULLET_SPEED);
 		this.yellow = yellow;
 		this.barnacle = barnacle;
 		bulletSprite = new ImageIcon("images/weapons/laserPurpleDot.png").getImage();

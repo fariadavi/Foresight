@@ -9,8 +9,8 @@ public abstract class Projectile {
 	protected double positionY;
 	protected boolean active = false;
 
-	public Projectile() {
-		
+	public Projectile(double projectileSpeed) {
+		this.speed = projectileSpeed;
 	}
 
 	public double getPositionX() {

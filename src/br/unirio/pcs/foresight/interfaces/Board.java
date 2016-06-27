@@ -99,9 +99,9 @@ public class Board extends JPanel implements Runnable {
         
         pistolProjectile = new PistolProjectile(yellow, barnacle);
         
-        mainMenuBackgroundMusic = new AudioPlayer("F:/Nova pasta/Foresight-master2.0/soundtrack/MainMenu.mp3");
-        firstLevelBackgroundMusic = new AudioPlayer("F:/Nova pasta/Foresight-master2.0/soundtrack/FirstLevel.mp3");
-        secondLevelBackgroundMusic = new AudioPlayer("F:/Nova pasta/Foresight-master2.0/soundtrack/SecondLevel.mp3");
+        mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
+        firstLevelBackgroundMusic = new AudioPlayer("soundtrack/FirstLevel.mp3");
+        secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
         
         mainMenu = new MainMenu(yellow, mainMenuBackgroundMusic);
         password = new Password(mainMenu, yellow);

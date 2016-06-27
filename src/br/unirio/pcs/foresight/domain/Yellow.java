@@ -63,28 +63,33 @@ public class Yellow extends Sprite {
 		return Projectile;
 	}
 
-	private void walk(double differenceTime, int firstStep,	int horizontalDirection) {
+	private void walk(double differenceTime, int horizontalDirection) {
 		frametime += differenceTime;
 		if (frametime > 0.1) {
 			steps++;
-			if (steps < firstStep || steps > (firstStep + 1))
-				steps = firstStep;
 			frametime = 0;
 		}
-		positionX += (horizontalDirection * speedY * differenceTime);
+		int firstStep = horizontalDirection == -1 ? 6 : 1;
+		if (steps < firstStep || steps > (firstStep + 1))
+			steps = firstStep;
+		
+		if(horizontalDirection == 1 && positionX < 956 || horizontalDirection == -1 && positionX > -4)
+			positionX += (horizontalDirection * speedY * differenceTime);
 	}
 	
 	@Override
 	public void update(double differenceTime) {
 		Projectile = false;
-		if ((key_states[KeyEvent.VK_RIGHT]) && (positionX < 956))
-			walk(differenceTime, 1, 1);
-		else if ((key_states[KeyEvent.VK_LEFT]) && (positionX > -4))
-			walk(differenceTime, 6, -1);
-		else if (steps >= 0 && steps < 3)
-			steps = 0;
-		else if (steps >= 5 && steps < 8)
-			steps = 5;
+		
+		int horizontalDirection = getHorizontalDirection();
+//		if (horizontalDirection != 0)
+		walk(differenceTime, horizontalDirection);
+		if (horizontalDirection == 0) {
+			if (steps >= 0 && steps < 3)
+				steps = 0;
+			else if (steps >= 5 && steps < 8)
+				steps = 5;
+		}
 
 		// Player movements controller
 		if (key_states[KeyEvent.VK_UP]) {
@@ -92,9 +97,9 @@ public class Yellow extends Sprite {
 				jumpVelocity = -1 * speedY * differenceTime;
 				onGround = false;
 			}
-			if (key_states[KeyEvent.VK_RIGHT] || (steps >= 0 && steps < 5))
+			if (horizontalDirection == 1 || (steps >= 0 && steps < 5))
 				steps = 3;
-			else if (key_states[KeyEvent.VK_LEFT] || (steps >= 5 && steps < 10))
+			else if (horizontalDirection == -1 || (steps >= 5 && steps < 10))
 				steps = 8;
 			else if (!(onGround) && key_states[KeyEvent.VK_RIGHT])
 				steps = 3;
@@ -119,10 +124,18 @@ public class Yellow extends Sprite {
 			Projectile = true;
 		}
 	}
+	
+	public int getHorizontalDirection() {
+		return key_states[KeyEvent.VK_RIGHT] ? 1 : (key_states[KeyEvent.VK_LEFT] ? -1 : 0);
+	}
 
 	@Override
 	public void draw(Graphics2D graphics2D) {
 
+//		graphics2D.drawString(String.valueOf(getHorizontalDirection()), 10, 10);
+//		graphics2D.drawString(String.valueOf(steps), 30, 10);
+//		graphics2D.drawString(String.valueOf(positionX), 50, 10);
+		
 		graphics2D.drawImage(hudYellow[1], 0, 0, null);
 		graphics2D.drawImage(hudYellow[1], 55, 0, null);
 		graphics2D.drawImage(hudYellow[1], 110, 0, null);

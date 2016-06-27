@@ -22,7 +22,7 @@ public class Player extends Sprite {
 	private boolean onGround;
 
 	public Player() {
-		super(PLAYER_POSITION_X, PLAYER_POSITION_Y, PLAYER_RUN_SPEED, PLAYER_JUMP_SPEED);
+		super(PLAYER_POSITION_X, PLAYER_POSITION_Y, PLAYER_RUN_SPEED, PLAYER_JUMP_SPEED, 1);
 		playerSprite[0] = new ImageIcon("images/characters/yellow/alienYellow_stand_right.png").getImage();
 		playerSprite[1] = new ImageIcon("images/characters/yellow/alienYellow_walk_right0.png").getImage();
 		playerSprite[2] = new ImageIcon("images/characters/yellow/alienYellow_walk_right1.png").getImage();
@@ -57,10 +57,10 @@ public class Player extends Sprite {
 	@Override
 	public void update(double differenceTime) {
 		Projectile = false;
-		if ((key_states[KeyEvent.VK_RIGHT]) && (positionX < 956))
-			walk(differenceTime, 1, 1);
-		else if ((key_states[KeyEvent.VK_LEFT]) && (positionX > -4))
-			walk(differenceTime, 6, -1);
+		if ((positionX < 956) && (positionX > -4)) {
+			int horizontalDirection = getHorizontalDirection();
+			walk(differenceTime, horizontalDirection == -1 ? 6 : 1, horizontalDirection);
+		}
 		else if (steps >= 0 && steps < 3)
 			steps = 0;
 		else if (steps >= 5 && steps < 8)
@@ -100,6 +100,10 @@ public class Player extends Sprite {
 		}
 	}
 
+	public int getHorizontalDirection() {
+		return key_states[KeyEvent.VK_RIGHT] ? 1 : (key_states[KeyEvent.VK_LEFT] ? -1 : 0);
+	}
+	
 	@Override
 	public void draw(Graphics2D graphics2D) {
 
