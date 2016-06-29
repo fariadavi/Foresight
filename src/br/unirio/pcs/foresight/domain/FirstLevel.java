@@ -10,8 +10,6 @@ import javax.swing.ImageIcon;
 
 public class FirstLevel {
 	
-	private InputListener inputListener;
-	
 	private Yellow player;
 	private Image background;
 	private double positionX;
@@ -23,8 +21,7 @@ public class FirstLevel {
 	private List<Enemies> enemies = new ArrayList<Enemies>();
 	
 	
-	public FirstLevel(MainMenu mainMenu, InputListener input) { // extender classe Levels e criar abstrações entre First e Second Level
-		this.inputListener = input;
+	public FirstLevel(MainMenu mainMenu) { // extender classe Levels e criar abstrações entre First e Second Level
 		this.mainMenu = mainMenu;
 		this.firstLevelBackgroundMusic = new AudioPlayer("soundtrack/FirstLevel.mp3");
         
@@ -49,7 +46,7 @@ public class FirstLevel {
 			
 		}
 			
-		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]){
+		if (InputListener.key_states[KeyEvent.VK_ESCAPE]){
 			deactivateScreen();
 			mainMenu.activateScreen();
 		}

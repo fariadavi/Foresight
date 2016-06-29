@@ -16,7 +16,6 @@ public class Yellow extends Sprite {
 	private Image[] yellowSprite = new Image[10];
 	private Image[] yellowGunSprite = new Image[2];
 	private Image[] hudYellow = new Image[15];
-	private InputListener inputListener;
 	private double frametime = 0;
 	private boolean Projectile;
 	private int steps = 0;
@@ -92,7 +91,7 @@ public class Yellow extends Sprite {
 		}
 
 		// Player movements controller
-		if (inputListener.getKeyStates()[KeyEvent.VK_UP]) {
+		if (InputListener.key_states[KeyEvent.VK_UP]) {
 			if (onGround) {
 				jumpVelocity = -1 * speedY * differenceTime;
 				onGround = false;
@@ -101,7 +100,7 @@ public class Yellow extends Sprite {
 				steps = 3;
 			else if (horizontalDirection == -1 || (steps >= 5 && steps < 10))
 				steps = 8;
-			else if (!(onGround) && inputListener.getKeyStates()[KeyEvent.VK_RIGHT])
+			else if (!(onGround) && InputListener.key_states[KeyEvent.VK_RIGHT])
 				steps = 3;
 		} 
 
@@ -120,13 +119,13 @@ public class Yellow extends Sprite {
 		onGround = positionY >= 600;
 
 		// Player shots controller
-		if ((inputListener.getKeyStates()[KeyEvent.VK_CONTROL])) {
+		if ((InputListener.key_states[KeyEvent.VK_CONTROL])) {
 			Projectile = true;
 		}
 	}
 	
 	public int getHorizontalDirection() {
-		return inputListener.getKeyStates()[KeyEvent.VK_RIGHT] ? 1 : (inputListener.getKeyStates()[KeyEvent.VK_LEFT] ? -1 : 0);
+		return InputListener.key_states[KeyEvent.VK_RIGHT] ? 1 : (InputListener.key_states[KeyEvent.VK_LEFT] ? -1 : 0);
 	}
 
 	@Override

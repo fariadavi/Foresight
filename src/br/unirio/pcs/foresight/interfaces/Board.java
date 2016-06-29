@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import br.unirio.pcs.foresight.domain.FirstLevel;
 import br.unirio.pcs.foresight.domain.InputListener;
 import br.unirio.pcs.foresight.domain.MainMenu;
-import br.unirio.pcs.foresight.domain.PistolProjectile;
 import br.unirio.pcs.foresight.domain.SecondLevel;
 
 public class Board extends JPanel implements Runnable {
@@ -24,9 +23,8 @@ public class Board extends JPanel implements Runnable {
 //	private Fly fly;
 //	private SnakeLava snakeLava;
 //	private Barnacle barnacle;
-	private PistolProjectile pistolProjectile;
-	private InputListener inputListener;
-	
+//	private PistolProjectile pistolProjectile;
+
 	private MainMenu mainMenu;
 //	private Password password;
 //	private Records recordes;
@@ -71,12 +69,12 @@ public class Board extends JPanel implements Runnable {
 	private class KeyboardAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent event) {
-            inputListener.getKeyStates()[event.getKeyCode()] = false;
+            InputListener.key_states[event.getKeyCode()] = false;
         }
         
         @Override
         public void keyPressed(KeyEvent event) {
-        	inputListener.getKeyStates()[event.getKeyCode()] = true;
+        	InputListener.key_states[event.getKeyCode()] = true;
         }
     }
 	
@@ -84,7 +82,6 @@ public class Board extends JPanel implements Runnable {
         setBackground(Color.BLACK);
         addKeyListener(new KeyboardAdapter());
         
-        inputListener = new InputListener();
 //        yellow = new Yellow();
         
 //        bee = new Bee();
@@ -98,11 +95,11 @@ public class Board extends JPanel implements Runnable {
 //        firstLevelBackgroundMusic = new AudioPlayer("soundtrack/FirstLevel.mp3");
 //        secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
         
-        mainMenu = new MainMenu(inputListener);
+        mainMenu = new MainMenu();
 //        password = new Password(mainMenu, inputListener);
 //        recordes = new Records(mainMenu, inputListener);
-        firstLevel = new FirstLevel(mainMenu, inputListener);
-        secondLevel = new SecondLevel(mainMenu, inputListener);
+        firstLevel = new FirstLevel(mainMenu);
+        secondLevel = new SecondLevel(mainMenu);
         
 //        mainMenu.setPassword(password);
 //        mainMenu.setRecordes(recordes);
@@ -120,7 +117,7 @@ public class Board extends JPanel implements Runnable {
 		} else if (firstLevel.isActive()){
 			firstLevel.update(differenceTime);
 //			yellow.update(differenceTime);
-			pistolProjectile.update(differenceTime);
+//			pistolProjectile.update(differenceTime);
 		}
 //		if (!barnacle.isAlive())
 //			barnacle.spawn();
@@ -156,12 +153,12 @@ public class Board extends JPanel implements Runnable {
 //			fly.draw(graphics2D);
 //			snakeLava.draw(graphics2D);
 //			barnacle.draw(graphics2D);
-			pistolProjectile.draw(graphics2D);
+//			pistolProjectile.draw(graphics2D);
 		//Desenha tela do segundo level
 		} else if (secondLevel.isActive()) {
 			secondLevel.draw(graphics2D);
 //			yellow.draw(graphics2D);
-			pistolProjectile.draw(graphics2D);
+//			pistolProjectile.draw(graphics2D);
 		}
 	}
 }

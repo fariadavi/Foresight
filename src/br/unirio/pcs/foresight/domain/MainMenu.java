@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 
 public class MainMenu {
 	
-	private InputListener inputListener;
 	private AudioPlayer mainMenuBackgroundMusic;
 	
 	private Password password;
@@ -32,10 +31,9 @@ public class MainMenu {
 	private boolean newGameIsSelected = true, paswordIsSelected, 
 			recordesIsSelected, quitIsSelected, currentlyOnScreen = true;
 
-	public MainMenu (InputListener input) {
-		this.inputListener = input;
-		this.password = new Password(this, input);
-		this.recordes = new Records(this, input);
+	public MainMenu () {
+		this.password = new Password(this);
+		this.recordes = new Records(this);
 		
 		this.mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
@@ -162,15 +160,15 @@ public class MainMenu {
 	}
 	
 	private boolean pressEnter() {
-		return inputListener.getKeyStates()[KeyEvent.VK_ENTER];
+		return InputListener.key_states[KeyEvent.VK_ENTER];
 	}
 
 	private boolean pressUp() {
-		return inputListener.getKeyStates()[KeyEvent.VK_UP];
+		return InputListener.key_states[KeyEvent.VK_UP];
 	}
 
 	private boolean pressDown() {
-		return inputListener.getKeyStates()[KeyEvent.VK_DOWN];
+		return InputListener.key_states[KeyEvent.VK_DOWN];
 	}
 	
 }

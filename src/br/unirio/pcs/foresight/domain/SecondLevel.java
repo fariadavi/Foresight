@@ -8,8 +8,6 @@ import javax.swing.ImageIcon;
 
 public class SecondLevel {
 
-	private InputListener inputListener;
-	
 	private MainMenu mainMenu;
 	private Yellow yellow;
 	private Image[] background = new Image[10];
@@ -18,9 +16,7 @@ public class SecondLevel {
 	private boolean currentlyOnScreen;
 	private AudioPlayer secondLevelBackgroundMusic;
 
-	public SecondLevel (MainMenu mainMenu, InputListener input) {
-		this.inputListener = input;
-		
+	public SecondLevel (MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
 		this.yellow = new Yellow();
 		this.secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
@@ -40,7 +36,7 @@ public class SecondLevel {
 				yellow.setPositionX(yellow.getPositionX() + yellow.getSpeedX() * differenceTime);
 			}
 		}
-		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]){
+		if (InputListener.key_states[KeyEvent.VK_ESCAPE]){
 			deactivateScreen();
 			mainMenu.activateScreen();
 		}

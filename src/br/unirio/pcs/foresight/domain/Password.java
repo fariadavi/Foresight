@@ -9,8 +9,6 @@ import javax.swing.JTextField;
 
 public class Password {
 
-	private InputListener inputListener;
-	
 	private JTextField textField;
 	private String inputText = "";
 	private MainMenu mainMenu;
@@ -18,9 +16,7 @@ public class Password {
 	private double positionX, positionY;
 	private boolean currentlyOnScreen = false;
 	
-	public Password (MainMenu mainMenu, InputListener input) {
-		this.inputListener = input;
-		
+	public Password (MainMenu mainMenu) {
 		this.background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
 		this.textField = new JTextField(10);
 		this.inputText.concat(textField.getText());
@@ -30,7 +26,7 @@ public class Password {
 	}
 
 	public void update(double differenceTime) {
-		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]){
+		if (InputListener.key_states[KeyEvent.VK_ESCAPE]){
 			deactivateScreen();
 			mainMenu.activateScreen();
 		}

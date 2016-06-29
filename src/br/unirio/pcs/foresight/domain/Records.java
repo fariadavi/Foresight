@@ -13,21 +13,19 @@ import br.unirio.pcs.foresight.domain.dto.Score;
 
 public class Records {
 
-	private InputListener inputListener; 
 	private MainMenu mainMenu;
 	private List<Score> scores;
 	private double positionX = 365, positionY = 610;
 	private boolean currentlyOnScreen = false;
 
-	public Records(MainMenu mainMenu, InputListener input) {
+	public Records(MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
-		this.inputListener = input;
 	}
 
 	public void update(double differenceTime) {
 		if (positionY > 80)
 			positionY -= 180 * differenceTime;
-		if (inputListener.getKeyStates()[KeyEvent.VK_ESCAPE]) {
+		if (InputListener.key_states[KeyEvent.VK_ESCAPE]) {
 			deactivateScreen();
 			mainMenu.activateScreen();
 		}
