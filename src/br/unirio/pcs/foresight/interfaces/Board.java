@@ -95,17 +95,17 @@ public class Board extends JPanel implements Runnable {
         bee = new Bee();
         fly = new Fly();
         snakeLava = new SnakeLava();
-        barnacle = new Barnacle();
+        barnacle = new Barnacle(yellow);
+        barnacle.init();
         
-        pistolProjectile = new PistolProjectile(yellow, barnacle);
-        
-        mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
-        firstLevelBackgroundMusic = new AudioPlayer("soundtrack/FirstLevel.mp3");
-        secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
+        mainMenuBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/MainMenu.mp3");
+        firstLevelBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/FirstLevel.mp3");
+        secondLevelBackgroundMusic = new AudioPlayer("E:/Nova pasta/Foresight-master2.0/soundtrack/SecondLevel.mp3");
         
         mainMenu = new MainMenu(yellow, mainMenuBackgroundMusic);
         password = new Password(mainMenu, yellow);
         recordes = new Records(mainMenu, yellow);
+        pistolProjectile = new PistolProjectile(yellow, barnacle, recordes);
         firstLevel = new FirstLevel(mainMenu, yellow, firstLevelBackgroundMusic);
         secondLevel = new SecondLevel(mainMenu, yellow, secondLevelBackgroundMusic);
         mainMenu.setPassword(password);
@@ -125,10 +125,9 @@ public class Board extends JPanel implements Runnable {
 			firstLevel.update(differenceTime);
 			yellow.update(differenceTime);
 			pistolProjectile.update(differenceTime);
+			barnacle.update(differenceTime);
 		}
-		if (!barnacle.isAlive())
-			barnacle.spawn();
-		barnacle.update(differenceTime);
+		
 		if (!bee.isAlive())
 			bee.spawn();
 		bee.update(differenceTime);

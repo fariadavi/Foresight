@@ -19,7 +19,7 @@ public class MainFrame extends JFrame {
 		ImageIcon imageIcon = new ImageIcon(ICON_PATH);
 		add(new Board());
 	
-		setSize(getBoardWidth(), getBoardHeigth());
+		setSize(BOARD_WIDTH, BOARD_HEIGTH);
 		setMinimumSize(getSize());
 		setResizable(false);
 		setTitle("Foresight");
@@ -35,14 +35,6 @@ public class MainFrame extends JFrame {
 				new MainFrame().setVisible(true);
 			}
 		});
-	}
-
-	public static int getBoardWidth() {
-		return BOARD_WIDTH;
-	}
-
-	public static int getBoardHeigth() {
-		return BOARD_HEIGTH;
 	}
 	
 }

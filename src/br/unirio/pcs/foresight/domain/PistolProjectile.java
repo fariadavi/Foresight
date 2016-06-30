@@ -1,22 +1,30 @@
 package br.unirio.pcs.foresight.domain;
 
 import java.awt.Graphics2D;
-import java.awt.Image;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 
-public class PistolProjectile extends Projectile {
+import br.unirio.pcs.foresight.domain.dto.Score;
+
+public class PistolProjectile extends Projectile{
 
 	private static final int BULLET_SPEED = 500;
 	private Yellow yellow;
-	private Barnacle barnacle;
-	private Image bulletSprite;
+	private Barnacle barnacles;
+	private Records records;
 	private double pistolProjectileFrametime = 0;
 	
-	public PistolProjectile(Yellow yellow, Barnacle barnacle) {
-		super(BULLET_SPEED);
+	private List<Projectile> projectiles = new ArrayList<Projectile>();
+	
+	public PistolProjectile(Yellow yellow, Barnacle barnacle, Records records) {
+		super();
 		this.yellow = yellow;
-		this.barnacle = barnacle;
+		this.barnacles = barnacle;
+		this.records = records;
 		bulletSprite = new ImageIcon("images/weapons/laserPurpleDot.png").getImage();
 	}
 
@@ -25,29 +33,62 @@ public class PistolProjectile extends Projectile {
 		
 		pistolProjectileFrametime += differenceTime;
 		if (yellow.getProjectile()){
-			if (pistolProjectileFrametime > 0.1){
-				if (!active()){
-					activate();
-					setPositionX(yellow.getPositionX());
-					setPositionY(yellow.getPositionY());
-					pistolProjectileFrametime = 0;
+			if (pistolProjectileFrametime > 0.5){
+				
+				Projectile newProjectile = new PistolProjectile(yellow, barnacles, records);
+				this.projectiles.add(newProjectile);
+				
+				for(Projectile projetil : this.projectiles){
+					if (!projetil.active()){
+						projetil.activate();
+						projetil.setPositionX(yellow.getPositionX());
+						projetil.setPositionY(yellow.getPositionY());
+						pistolProjectileFrametime = 0;
+					}
 				}
 			}
 		}
-		if (active()) {
-			positionX += BULLET_SPEED * differenceTime;
-			if (CheckBoxCollision(positionX, positionY, 9, 10, barnacle.getPositionX() - 72, barnacle.getPositionY() - 25, 58, 40)){
-				deactivate();
-				barnacle.die();
+		
+		for(Projectile projectile : this.projectiles){
+			if (projectile.active()) {
+				projectile.positionX += BULLET_SPEED * differenceTime;
+				
+				Iterator<Sprite> iterator = this.barnacles.getBarnacles().iterator();
+				while(iterator.hasNext()){
+					Sprite barnacle = iterator.next();
+					if (CheckBoxCollision(projectile.positionX, projectile.positionY, 9, 10, barnacle.getPositionX() - 72, barnacle.getPositionY() - 25, 58, 40)){
+						projectile.deactivate();
+						this.barnacles.remove(barnacle);
+						Score newScore = new Score("Yellow", 10);
+						records.addScore(newScore);
+					}
+				}
+				
+//				for (Sprite barnacle : this.barnacles.getBarnacles()){
+//					if (CheckBoxCollision(projectile.positionX, projectile.positionY, 9, 10, barnacle.getPositionX() - 72, barnacle.getPositionY() - 25, 58, 40)){
+//						projectile.deactivate();
+//						this.barnacles.remover(barnacle);
+//						Score newScore = new Score("Yellow", 10);
+//						records.addScore(newScore);
+//					}
+//				}
+			}
+			if (projectile.positionX > 1000){
+				projectile.deactivate();
 			}
 		}
-		if (getPositionX() > 1000) 
-			deactivate();
 	}
 	@Override
 	public void draw(Graphics2D graphics2D) {
-		if (active())
-			graphics2D.drawImage(bulletSprite, (int) positionX + 83,(int) positionY + 43, null);
+		Projectile[] tiles = this.projectiles.toArray(new Projectile[this.projectiles.size()]);
+		
+		List<Projectile> clone = Arrays.asList(tiles); 
+		
+		for(Projectile projectile :clone){
+			if (projectile.active()){
+				graphics2D.drawImage(projectile.bulletSprite, (int) projectile.positionX + 83,(int) projectile.positionY + 43, null);
+			}
+		}
 	}
 	
 	private boolean CheckBoxCollision(double positionX1, double positionY1, double width1, double height1, double positionX2, double positionY2, double width2, double height2) {

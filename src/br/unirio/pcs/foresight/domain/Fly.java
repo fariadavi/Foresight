@@ -29,6 +29,7 @@ public class Fly extends Sprite {
 	
 		if (frametime > 0.2 && steps < 1){
 			steps++;
+			frametime = 0;
 		} else if (frametime > 0.4 && steps > 0){
 			steps--;
 			frametime = 0;

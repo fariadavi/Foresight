@@ -78,6 +78,8 @@ public class FileController {
 				linhas.append(linhaAtual);
 			}
 			
+			System.out.println(linhas);
+			
 			@SuppressWarnings("unchecked")
 			List<Score> scores = (List<Score>) xstream.fromXML(linhas.toString());
 			Collections.sort(scores);

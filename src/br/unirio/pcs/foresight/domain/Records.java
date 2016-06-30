@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
 import java.util.List;
 
 import br.unirio.pcs.foresight.domain.dto.Score;
@@ -72,6 +73,21 @@ public class Records {
 	
 	public boolean isActive() {
 		return currentlyOnScreen;
+	}
+
+	public void addScore(Score newScore) {
+		if(this.scores == null){
+			this.scores = new ArrayList<Score>();
+		}
+		
+		for(Score savedScore : this.scores){
+			if(savedScore.getPlayer().equals(newScore.getPlayer())){
+				savedScore.setScore(savedScore.getScore() + newScore.getScore());
+				return;
+			}
+		}
+		
+		this.scores.add(newScore);
 	}
 	
 }

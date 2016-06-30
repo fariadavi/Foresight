@@ -21,6 +21,7 @@ public class Password {
 		
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
 		textField = new JTextField(10);
+		textField.setEnabled(true);
 		inputText.concat(textField.getText());
 		positionX = 0;
 		positionY = -200;
@@ -38,7 +39,7 @@ public class Password {
 	
 	public void draw(Graphics2D graphics2D) {
 		graphics2D.drawImage(background, (int) positionX, (int) positionY, null);
-		textField.paint(graphics2D);
+		textField.paintComponents(graphics2D);
 	}
 	
 	public void deactivateScreen() {

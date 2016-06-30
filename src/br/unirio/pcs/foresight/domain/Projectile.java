@@ -1,6 +1,7 @@
 package br.unirio.pcs.foresight.domain;
 
 import java.awt.Graphics2D;
+import java.awt.Image;
 
 public abstract class Projectile {
 
@@ -8,9 +9,10 @@ public abstract class Projectile {
 	protected double positionX;
 	protected double positionY;
 	protected boolean active = false;
+	protected Image bulletSprite;
 
-	public Projectile(double projectileSpeed) {
-		this.speed = projectileSpeed;
+	public Projectile() {
+		
 	}
 
 	public double getPositionX() {
