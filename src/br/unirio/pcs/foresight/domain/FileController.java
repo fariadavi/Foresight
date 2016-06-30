@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +23,7 @@ public class FileController {
 	private static final String FILE = "score.xml";
 	private static final int MAX_LINHAS_ARQUIVO = 10;
 
-	public static void addScore(List<Score> scores) {
+	public static void saveScores(List<Score> scores) {
 		
 		CheckIfFileExists();
 		
@@ -33,7 +34,7 @@ public class FileController {
 			xstream.alias("score", Score.class);
 			String scoresInXML = xstream.toXML(scores);
 			
-			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE, true)));
+			BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(FILE)));
 			bufferedWriter.write(scoresInXML);
 			bufferedWriter.close();
 		} catch (FileNotFoundException ex) {
@@ -93,7 +94,7 @@ public class FileController {
 			System.out.println("Erro: " + ex.getMessage());
 		}
 		
-		return Arrays.asList();
+		return new ArrayList<Score>();
 	}
 	
 	public static void CheckIfFileExists() {

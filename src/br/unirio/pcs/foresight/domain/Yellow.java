@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 
 public class Yellow extends Sprite {
 
+	public static String NOME_JOGADOR = "Yellow";
 	private static final int YELLOW_POSITION_X = 30;
 	private static final int YELLOW_POSITION_Y = 600;
 	private static final int YELLOW_RUN_SPEED = 250;

@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
-import java.util.ArrayList;
 import java.util.List;
 
 import br.unirio.pcs.foresight.domain.dto.Score;
@@ -23,6 +22,7 @@ public class Records {
 	public Records(MainMenu mainMenu, Yellow yellow) {
 		this.mainMenu = mainMenu;
 		this.yellow = yellow;
+		this.scores = FileController.recoversScore();
 	}
 
 	public void update(double differenceTime) {
@@ -67,27 +67,35 @@ public class Records {
 	}
 	
 	public void activateScreen() {
-		this.scores = FileController.recoversScore();
 		currentlyOnScreen = true;
 	}
 	
 	public boolean isActive() {
 		return currentlyOnScreen;
 	}
-
-	public void addScore(Score newScore) {
-		if(this.scores == null){
-			this.scores = new ArrayList<Score>();
+	
+	public void updateUserName(String newName){
+		for(Score savedScore : this.scores){
+			if(savedScore.getPlayer().equalsIgnoreCase("yellow")){
+				savedScore.setPlayer(newName);
+			}
 		}
 		
+		FileController.saveScores(this.scores);
+	}
+
+	public void addScore(Score newScore) {
 		for(Score savedScore : this.scores){
-			if(savedScore.getPlayer().equals(newScore.getPlayer())){
+			if(savedScore.getPlayer().equalsIgnoreCase(newScore.getPlayer())){
 				savedScore.setScore(savedScore.getScore() + newScore.getScore());
+				FileController.saveScores(this.scores);
 				return;
 			}
 		}
 		
 		this.scores.add(newScore);
+		
+		FileController.saveScores(this.scores);
 	}
 	
 }

@@ -3,7 +3,6 @@ package br.unirio.pcs.foresight.domain;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.ImageIcon;
@@ -53,25 +52,14 @@ public class PistolProjectile extends Projectile{
 			if (projectile.active()) {
 				projectile.positionX += BULLET_SPEED * differenceTime;
 				
-				Iterator<Sprite> iterator = this.barnacles.getBarnacles().iterator();
-				while(iterator.hasNext()){
-					Sprite barnacle = iterator.next();
+				for(Sprite barnacle : this.barnacles.getBarnacles()){
 					if (CheckBoxCollision(projectile.positionX, projectile.positionY, 9, 10, barnacle.getPositionX() - 72, barnacle.getPositionY() - 25, 58, 40)){
 						projectile.deactivate();
 						this.barnacles.remove(barnacle);
-						Score newScore = new Score("Yellow", 10);
-						records.addScore(newScore);
+						Score newScore = new Score("DFT", 10);
+						records.addScore(newScore); 
 					}
 				}
-				
-//				for (Sprite barnacle : this.barnacles.getBarnacles()){
-//					if (CheckBoxCollision(projectile.positionX, projectile.positionY, 9, 10, barnacle.getPositionX() - 72, barnacle.getPositionY() - 25, 58, 40)){
-//						projectile.deactivate();
-//						this.barnacles.remover(barnacle);
-//						Score newScore = new Score("Yellow", 10);
-//						records.addScore(newScore);
-//					}
-//				}
 			}
 			if (projectile.positionX > 1000){
 				projectile.deactivate();

@@ -33,8 +33,6 @@ public class Barnacle extends Sprite {
 		Sprite newBarnacle = new Barnacle(yellow);
 		this.barnacles.add(newBarnacle);
 		
-		Sprite newBarnacle2 = new Barnacle(yellow);
-		this.barnacles.add(newBarnacle2);
 		
 		for (Sprite barnacle : this.barnacles){
             if(!barnacle.isAlive()){

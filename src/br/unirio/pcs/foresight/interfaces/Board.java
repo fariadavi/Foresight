@@ -77,6 +77,7 @@ public class Board extends JPanel implements Runnable {
 	private class KeyboardAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent event) {
+//        	System.out.println((char)event.getKeyCode());
             yellow.key_states[event.getKeyCode()] = false;
         }
         
