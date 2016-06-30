@@ -6,7 +6,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 
@@ -16,15 +18,15 @@ public class TileSheet {
 
 	private int[][] map;
 	private Image tileSheet;
-	private Yellow player;
+	private Player player;
 	private double positionX;
 
-	public TileSheet(int width, int height, Yellow player) {
+	public TileSheet(int width, int height, Player player) {
 		this.player = player;
 		map = new int[height][width];
 	}
 
-	public static TileSheet getFromFile(String filePath, String mapPath, Yellow player) {
+	public static TileSheet getFromFile(String filePath, String mapPath, Player player) {
 
 		TileSheet sheet = null;
 
@@ -77,7 +79,30 @@ public class TileSheet {
 
 	public void update(double differenceTime) {
 		if (moveMap())
-			positionX += ((player.getHorizontalDirection() * -1) * (player.getSpeedX()/3) * differenceTime);
+			positionX += player.getHorizontalDirection() * -1 * player.getSpeedX() * differenceTime;
+		
+		double playerPX = player.getPositionX() - positionX;
+		double playerPY = player.getPositionY();
+		int width = player.getImage().getWidth(null);
+		int height = player.getImage().getHeight(null);
+		
+		int firstColisionTileY = (int) Math.floor(playerPY / Tile.TILE_HEIGHT);
+		int lastColisionTileY = (int) Math.ceil((playerPY + height) / Tile.TILE_HEIGHT);
+		
+		for (int y = (firstColisionTileY < 0 ? 0 : firstColisionTileY); y < (lastColisionTileY > map.length ? map.length : lastColisionTileY); y++) {
+			
+			int firstColisionTileX = (int) Math.floor(playerPX / Tile.TILE_WIDTH);
+			int lastColisionTileX = (int) Math.ceil((playerPX + width) / Tile.TILE_WIDTH);
+			
+			for (int x = (firstColisionTileX < 0 ? 0 : firstColisionTileX); x < (lastColisionTileX > map[0].length ? map[0].length : lastColisionTileX); x++) {
+				if(map[y][x] < 0)
+					continue;
+				
+				int tileX = x * Tile.TILE_WIDTH;
+				int tileY = y * Tile.TILE_HEIGHT;
+				CheckBoxCollision((int) (tileX + positionX), tileY, Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
+			}
+		}
 	}
 
 	
@@ -108,4 +133,25 @@ public class TileSheet {
 			}
 		}
 	}
+	
+	public void CheckBoxCollision(double positionX, double positionY, double width, double height) {
+		if (player.getPositionY() + player.getImage().getHeight(null) > positionY && player.getPositionY() + player.getImage().getHeight(null) < positionY + height)
+			if ((player.getPositionX() < positionX + width && player.getPositionX() > positionX) || (player.getPositionX() + player.getImage().getWidth(null) > positionX && player.getPositionX() + player.getImage().getWidth(null) < positionX + width)) {
+				player.setPositionY(positionY - player.getImage().getHeight(null));
+				player.setOnGround(true);
+			}
+
+		if (player.getPositionY() > positionY && player.getPositionY() < positionY + height)
+			if ((player.getPositionX() < positionX + width && player.getPositionX() > positionX) || (player.getPositionX() + player.getImage().getWidth(null) > positionX && player.getPositionX() + player.getImage().getWidth(null) < positionX + width))
+//				player.setPositionY(positionY + height);
+
+		if (player.getPositionX() < positionX + width && positionX < player.getPositionX() + player.getImage().getWidth(null)) 
+			if ((player.getPositionY() > positionY && player.getPositionY() < positionY + height) || (player.getPositionY() + player.getImage().getHeight(null)) > positionY && player.getPositionY() + player.getImage().getHeight(null) < positionY + height)
+				player.collidingLeft = true;
+//				player.setPositionX(positionX + width);
+		if (player.getPositionX() + player.getImage().getWidth(null) > positionX && player.getPositionX() + player.getImage().getWidth(null) < positionX + width)
+			if ((player.getPositionY() > positionY && player.getPositionY() < positionY + height) || (player.getPositionY() + player.getImage().getHeight(null)) > positionY && player.getPositionY() + player.getImage().getHeight(null) < positionY + height)
+				player.collidingRight = true;
+//				player.setPositionX(positionX - player.getImage().getWidth(null));
+		}
 }

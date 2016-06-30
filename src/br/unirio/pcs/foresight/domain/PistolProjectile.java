@@ -24,14 +24,14 @@ public class PistolProjectile extends Projectile {
 	public void update(double differenceTime) {
 		
 		pistolProjectileFrametime += differenceTime;
-		if (yellow.getProjectile()){
+//		if (yellow.getProjectile()){
 			if (pistolProjectileFrametime > 0.1){
 				if (!active()){
 					activate();
 					setPositionX(yellow.getPositionX());
 					setPositionY(yellow.getPositionY());
 					pistolProjectileFrametime = 0;
-				}
+//				}
 			}
 		}
 		if (active()) {

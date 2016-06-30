@@ -32,9 +32,6 @@ public class MainMenu {
 			recordesIsSelected, quitIsSelected, currentlyOnScreen = true;
 
 	public MainMenu () {
-		this.password = new Password(this);
-		this.recordes = new Records(this);
-		
 		this.mainMenuBackgroundMusic = new AudioPlayer("soundtrack/MainMenu.mp3");
 		background = new ImageIcon("images/backgroundMenu/colored_land.png").getImage();
 		
@@ -130,13 +127,13 @@ public class MainMenu {
 		
 	}
 
-//	public void setPassword(Password password) {
-//		this.password = password;
-//	}
-//
-//	public void setRecordes(Records recordes) {
-//		this.recordes = recordes;
-//	}
+	public void setPassword(Password password) {
+		this.password = password;
+	}
+
+	public void setRecordes(Records recordes) {
+		this.recordes = recordes;
+	}
 
 	public void setFirstLevel(FirstLevel firstLevel) {
 		this.firstLevel = firstLevel;

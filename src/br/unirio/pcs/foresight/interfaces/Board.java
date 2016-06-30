@@ -13,6 +13,8 @@ import javax.swing.JPanel;
 import br.unirio.pcs.foresight.domain.FirstLevel;
 import br.unirio.pcs.foresight.domain.InputListener;
 import br.unirio.pcs.foresight.domain.MainMenu;
+import br.unirio.pcs.foresight.domain.Password;
+import br.unirio.pcs.foresight.domain.Records;
 import br.unirio.pcs.foresight.domain.SecondLevel;
 
 public class Board extends JPanel implements Runnable {
@@ -26,8 +28,8 @@ public class Board extends JPanel implements Runnable {
 //	private PistolProjectile pistolProjectile;
 
 	private MainMenu mainMenu;
-//	private Password password;
-//	private Records recordes;
+	private Password password;
+	private Records recordes;
 	private FirstLevel firstLevel;
 	private SecondLevel secondLevel;
 	
@@ -96,13 +98,13 @@ public class Board extends JPanel implements Runnable {
 //        secondLevelBackgroundMusic = new AudioPlayer("soundtrack/SecondLevel.mp3");
         
         mainMenu = new MainMenu();
-//        password = new Password(mainMenu, inputListener);
-//        recordes = new Records(mainMenu, inputListener);
+        password = new Password(mainMenu);
+        recordes = new Records(mainMenu);
         firstLevel = new FirstLevel(mainMenu);
         secondLevel = new SecondLevel(mainMenu);
         
-//        mainMenu.setPassword(password);
-//        mainMenu.setRecordes(recordes);
+        mainMenu.setPassword(password);
+        mainMenu.setRecordes(recordes);
         mainMenu.setFirstLevel(firstLevel);
         mainMenu.setSecondLevel(secondLevel);
 	}
@@ -110,10 +112,10 @@ public class Board extends JPanel implements Runnable {
 	private void update(double differenceTime) {
 		if (mainMenu.isActive()) {
 			mainMenu.update(differenceTime);
-//		} else if (password.isActive()){
-//			password.update(differenceTime);
-//		} else if (recordes.isActive()) {
-//			recordes.update(differenceTime);
+		} else if (password.isActive()){
+			password.update(differenceTime);
+		} else if (recordes.isActive()) {
+			recordes.update(differenceTime);
 		} else if (firstLevel.isActive()){
 			firstLevel.update(differenceTime);
 //			yellow.update(differenceTime);
@@ -140,11 +142,11 @@ public class Board extends JPanel implements Runnable {
 		if (mainMenu.isActive()) {
 			mainMenu.draw(graphics2D);
 		//Desenha tela do password
-//		} else if (password.isActive()) {
-//			password.draw(graphics2D);
+		} else if (password.isActive()) {
+			password.draw(graphics2D);
 		//Desenha tela de recordes
-//		} else if (recordes.isActive()) {
-//			recordes.draw(graphics2D);
+		} else if (recordes.isActive()) {
+			recordes.draw(graphics2D);
 		//Desenha tela do primeiro level
 		} else if (firstLevel.isActive()) {
 			firstLevel.draw(graphics2D);

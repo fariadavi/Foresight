@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 public abstract class Sprite {
 
 	protected boolean alive = false;
-	protected double positionX, positionY, speedX, speedY, gravity = 0.5;
+	protected double positionX, positionY, speedX, speedY, gravity = 0.8;
 	protected int life;
 	
 	public Sprite(double positionX, double positionY, double speedX, double speedY, int life) {
